@@ -1,2 +1,2 @@
-# ATA-2022
-Automated text analysis
+# NLP courses
+Automated text analysis (2022)
