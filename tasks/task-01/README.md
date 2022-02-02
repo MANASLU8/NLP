@@ -28,15 +28,15 @@ re.split(r'\W+', raw)
 
 5. Сформировать для текста выбранного датасета аннотацию в формате `tsv` в соответствии со следующей структурой:
 ```tsv
-<sentence_1_token_1>	<senence_1_stem_1>	<senence_1_lemma_1>
-<senence_1_token_2>	<senence_1_stem_2>	<senence_1_lemma_2>
+<sentence_1_token_1>	<sentence_1_stem_1>	<sentence_1_lemma_1>
+<sentence_1_token_2>	<sentence_1_stem_2>	<sentence_1_lemma_2>
 ...
-<senence_1_token_N>	<senence_1_stem_N>	<senence_1_lemma_N>
+<sentence_1_token_N>	<sentence_1_stem_N>	<sentence_1_lemma_N>
 
-<sentence_2_token_1>	<senence_2_stem_1>	<senence_2_lemma_1>
-<senence_2_token_2>	<senence_2_stem_2>	<senence_2_lemma_2>
+<sentence_2_token_1>	<sentence_2_stem_1>	<sentence_2_lemma_1>
+<sentence_2_token_2>	<sentence_2_stem_2>	<sentence_2_lemma_2>
 ...
-<senence_2_token_N>	<senence_2_stem_N>	<senence_2_lemma_N>
+<sentence_2_token_N>	<sentence_2_stem_N>	<sentence_2_lemma_N>
 ```
 
 Пример фрагмента результирующего файла:
