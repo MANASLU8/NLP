@@ -18,4 +18,4 @@
 
 | Project name | Student name |
 | --- | --- |
-| [hello-world](/projects/hello-world) | Иванов Иван Иванович |
+| [emoji-labeller](/projects/emoji-labeller) | Иванов Иван Иванович |
