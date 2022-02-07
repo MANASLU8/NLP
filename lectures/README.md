@@ -1,5 +1,3 @@
 # Лекции
 
-Папка с лекциями:
-Лекция 1:
-Лекция 2:
+[Папка с лекциями на drive.google](https://drive.google.com/drive/folders/1VzEIrTUxFtphF2uVQhJfGTiDOQS-EyHC?usp=sharing).
