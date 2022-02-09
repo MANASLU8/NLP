@@ -20,3 +20,4 @@
 | --- | --- |
 | [emoji-labeller](/projects/emoji-labeller) | Иванов Иван Иванович |
 | [iburakov](/projects/iburakov) | Бураков Илья Алексеевич |
+| [msokolov](/projects/msokolov) | Соколов Максим Владимирович |
