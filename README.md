@@ -19,3 +19,4 @@
 | Project name | Student name |
 | --- | --- |
 | [emoji-labeller](/projects/emoji-labeller) | Иванов Иван Иванович |
+| [AnnaBazariva](/projects/AnnaBazarova) | Базарова Анна Александровна |
