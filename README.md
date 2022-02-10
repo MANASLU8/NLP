@@ -20,3 +20,5 @@
 | --- | --- |
 | [emoji-labeller](/projects/emoji-labeller) | Иванов Иван Иванович |
 | [iburakov](/projects/iburakov) | Бураков Илья Алексеевич |
+| [e1izabeth](/projects/e1izabeth) | Кузенкова Елизавета Владимировна |
+| [msokolov](/projects/msokolov) | Соколов Максим Владимирович |
