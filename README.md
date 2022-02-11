@@ -19,4 +19,7 @@
 | Project name | Student name |
 | --- | --- |
 | [emoji-labeller](/projects/emoji-labeller) | Иванов Иван Иванович |
-| [AnnaBazariva](/projects/AnnaBazarova) | Базарова Анна Александровна |
+| [iburakov](/projects/iburakov) | Бураков Илья Алексеевич |
+| [e1izabeth](/projects/e1izabeth) | Кузенкова Елизавета Владимировна |
+| [msokolov](/projects/msokolov) | Соколов Максим Владимирович |
+| [anna-bazarova](/projects/anna-bazarova) | Базарова Анна Александровна |
