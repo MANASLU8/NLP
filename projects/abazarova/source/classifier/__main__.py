@@ -1,7 +1,7 @@
 import click
 
-from .tokenizer import tokenize
-from .reader import read_emoji_to_label_mapping
+from projects.abazarova.source.classifier.tokenizer import tokenize
+from projects.abazarova.source.classifier.reader import read_emoji_to_label_mapping
 
 
 @click.group()
