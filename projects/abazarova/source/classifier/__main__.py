@@ -1,4 +1,6 @@
 import click
+import pathlib
+from pathlib import Path
 
 from projects.abazarova.source.classifier.tokenizer import tokenize
 from projects.abazarova.source.classifier.reader import read_emoji_to_label_mapping
@@ -12,7 +14,9 @@ def main():
 @main.command()
 @click.argument("text", type=str)
 def label(text):
-    labels = read_emoji_to_label_mapping("assets/emoji-to-label.yml").classify(text)
+    path = Path(str(Path(Path.cwd()))[:-len("source.classifier")],"assets","emoji-to-label.yml")
+    print(path)
+    labels = read_emoji_to_label_mapping(path).classify(text)
 
     if len(labels) == 0:
         print("No labels found for the given text")
