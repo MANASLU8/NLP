@@ -23,3 +23,4 @@
 | [e1izabeth](/projects/e1izabeth) | Кузенкова Елизавета Владимировна |
 | [msokolov](/projects/msokolov) | Соколов Максим Владимирович |
 | [anna-bazarova](/projects/anna-bazarova) | Базарова Анна Александровна |
+| [nrogalenko](/projects/nrogalenko) | Рогаленко Никита Александрович |
