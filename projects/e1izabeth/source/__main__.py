@@ -17,16 +17,17 @@ def process_file(fname):
     n = 0
     for row in data:
         classId = row[0]
-        text = row[1]
-        tokens = tokenize_text(text)
         try:
             dirPath = "../assets/" + Path(fname).name.split('.')[0] + "/" + classes[classId] + '/'
             if not os.path.exists(dirPath):
                 os.makedirs(dirPath)
             f = open(dirPath + str(n) + '.tsv', 'w+')
             f.truncate(0)
-            for w in tokens:
-                f.write(w[2] + '\t' + stemmer.stem(w[2]) + "\t" + lemmatizer.lemmatize(w[2]) + '\n')
+            for i in range(1, len(row)):
+                text = row[i]
+                tokens = tokenize_text(text)
+                for w in tokens:
+                    f.write(w[2] + (('\t' + stemmer.stem(w[2]) + "\t" + lemmatizer.lemmatize(w[2])) if w[1] == 'word' else "") + '\n')
             f.close()
         except Exception as e:
             print(e)
