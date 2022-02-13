@@ -6,7 +6,7 @@ import nltk
 from nltk import SnowballStemmer, WordNetLemmatizer
 from nltk.tag import pos_tag
 
-word_temp = r"([a-zA-Z']+)"
+word_temp = r"([a-zA-Z]+)"
 number_temp = r"([0-9]+)"
 punc_temp = r"([^A-Za-z0-9\s])"
 
