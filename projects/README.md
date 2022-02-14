@@ -25,7 +25,7 @@
 │   └── environment.yml
 ├── README.md
 └── source
-    ├── classifier
+    ├── lab1
     │   ├── __init__.py
     │   ├── __main__.py
     │   ├── reader.py
