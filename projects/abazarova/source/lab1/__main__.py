@@ -11,28 +11,41 @@ def main():
 
 @main.command()
 @click.argument("paths", type=str)
-@click.argument("pos_tags", type=bool)
-def token(paths, pos_tags):
-    lines = read_from_file(paths)
-    # print(lines)
-    tokens = set()
-    for line in lines:
-        tokens |= set(tokenize(line[0]))
+@click.argument("pos_tags", type=bool, required=False)
+def token(paths, pos_tags=False):
+    files = read_from_file(paths)
+    # print(files)
+    tokens = []
+    for file in files:
+        rez=tokenize(file[0])
+        # file_class, file_name, array_of_tokens
+        tokens.append([rez[1], rez[2], rez[0]])
     # print(tokens)
-    dictionary=dict()
     # Для корректной работы лемматайзера, нужно получить POS-теги
-    for t in tokens:
-        dictionary[t] = [pos(t)]
-    # Получаем стеммы - используем токены, которые получили перед этим
-    for t in dictionary:
-        dictionary[t].append(stemm(t))
-    # Получаем леммы - тут надо использовать теги, которые мы до этого получили
-    for t in tokens:
-        dictionary[t].append(lemm(t, dictionary[t][0]))
+    for tok in tokens:
+        tok[2] = pos(tok[2])
 
-    # for t in dictionary:
-        # print(t, dictionary[t])
-    write_to_file(paths, dictionary, pos_tags)
+    # Получаем стеммы - используем токены, которые получили перед этим
+    for tok in tokens:
+        stem = []
+        for i in range(len(tok[2])):
+            stem.append(stemm(tok[2][i][0]))
+        tok.append(stem)
+    # Получаем леммы - тут надо использовать теги, которые мы до этого получили
+    for tok in tokens:
+        lem = []
+        for i in range(len(tok[2])):
+            lem.append(lemm(tok[2][i][0], tok[2][i][1]))
+        tok.append(lem)
+
+    # for tok in tokens:
+        # print("**********")
+        # for i in range(len(tok[2])):
+            # print(tok[2][i][0], tok[3][i], tok[4][i])
+
+    # print(*tokens, sep="\n")
+
+    write_to_file(paths, tokens, pos_tags)
 
 
 if __name__ == "__main__":

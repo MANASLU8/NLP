@@ -4,92 +4,130 @@ from nltk import SnowballStemmer
 from nltk import WordNetLemmatizer
 from nltk.corpus import wordnet
 import nltk
+
 nltk.download('punkt')
 nltk.download('wordnet')
 nltk.download('omw-1.4')
 nltk.download('averaged_perceptron_tagger')
 
-comma_regexp = r'","'
-sentence_regexp = r'[?!.] '
-word_regexp = r'([,:;]? )|(\\+)|-+'
+node_sep = r''
+
+word_regexp = r'^[a-z]+\'?[a-z]*'
+big_word_regexp = r'^[A-Z]+[a-z]*\'?[a-z]*'
+red_word_regexp = r'^[A-Za-z]*(\.[A-Za-z]+)+\.?'
+space_regexp = r'[ ]+'
+punct_regexp = r'(\.\.\.|[\*=\'_,.!?;:\(\)\-\\\/]|\-\-)'
+site_regexp = r'(https?:\/\/)?([A-Za-z]*\.)+(com|net)(\/[A-Za-z0-9\.]*)*\/?'
+money_regexp = r'\$[0-9]*(,?[0-9]{3})*\.?[0-9]*([kbmKBM]|bn| [Bb]illion| [Mm]illion| [Hh]undred| [Tt]housand)?'
+numer_regexp = r'(#[0-9]+|\'[0-9]+|[0-9]+(th|nd|rd|st)|No. [0-9]+)'
+number_regexp = r'-?[0-9]+.?[0-9]*|([0-9]+ )?[0-9]+(\/?[0-9]+)?'
+tag_regexp = r'(\&lt;.*\&gt;|\&lt;.*\&\\gt;)'
+words_w_num_regexp = r'[0-9A-Za-z]+'
 
 
 def tokenize1(text: str):
-    array_of_tokens=word_tokenize(text)
+    array_of_tokens = word_tokenize(text)
     # print(array_of_tokens)
     return array_of_tokens
 
 
-def tokenize(text: str):
-    # Шаг 1: делим строку на части - то, что внутри кавычек
-    array_of_nodes = re.compile(comma_regexp).split(text)
-    # print(*array_of_nodes,sep="\n")
-    # Шаг 2: делим каждую ноду на предложения
-    array_of_sentences = []
-    for txt in array_of_nodes:
-        array_of_sentences += re.compile(sentence_regexp).split(txt)
-    # print(*array_of_sentences, sep="\n")
-    # Шаг 3: делим предложения на слова
-    array_of_words = []
-    for txt in array_of_sentences:
-        array_of_words += re.compile(word_regexp).split(txt)
-    # print(*array_of_words, sep="\n")
-    # Шаг 4: обрезаем лишние знаки препинания и убираем повторы
+def tokenize(file: str):
+    # Шаг 1: делим строку на части - то, что внутри кавычек, получаем текст для анализа
+    array_of_nodes = re.findall(node_regexp, file)
+    for i in range(len(array_of_nodes)):
+        array_of_nodes[i] = array_of_nodes[i][1:-1]
+    # print("***tokenize***NODES")
+    # print(*array_of_nodes, sep="\n")
+    # return
+    file_class = array_of_nodes[0]
+    file_name = re.sub(r'[^A-Za-z0-9]+', "_", array_of_nodes[1])
+    if file_name[-1] == "_":
+        file_name = file_name[:-1]
+    text = str(array_of_nodes[1] + ". " + array_of_nodes[2])
+    # print(text)
+    # Шаг 2: по шаблонам выделяем токены и записываем в список токенов
     array_of_tokens = []
-    for txt in array_of_words:
-        # print(txt)
-        word = pretty(txt)
-        # print(word)
-        if word:
-            array_of_tokens += [word]
-    # print(*array_of_tokens, sep="\n")
-    # ? Шаг 5: вернуть знаки препинания и теги??
-    # my_tokens = re.findall(_regexp,text)!!!
-    return array_of_tokens
+    while len(text) > 0:
+        print(text)
+        match = re.match(tag_regexp, text)
+        if match is not None:
+            print(match.group(0), "TAG")
+            text = text[len(match.group(0)):]
+            if match.group(0):
+                array_of_tokens.append(match.group(0))
 
+        match = re.match(red_word_regexp, text)
+        if match is not None:
+            print(match.group(0), "RED")
+            text = text[len(match.group(0)):]
+            if match.group(0):
+                array_of_tokens.append(match.group(0))
 
-def pretty(token: str):
-    word = token
-    if not word:
-        return False
+        match = re.match(site_regexp, text)
+        if match is not None:
+            print(match.group(0), "SITE")
+            text = text[len(match.group(0)):]
+            if match.group(0):
+                array_of_tokens.append(match.group(0))
 
-    if len(word) <= 0:
-        return False
+        match = re.match(money_regexp, text)
+        if match is not None:
+            print(match.group(0), "MON")
+            text = text[len(match.group(0)):]
+            if match.group(0):
+                array_of_tokens.append(match.group(0))
 
-    # Нужно обработать теги! '&lt;strong&gt;Opinion&lt;/strong&gt' -> 'Opinion'
-    # все теги формата: &lt;ТЕГ&gt;
-    if "&" in word:
-        # print(word)
-        tags = []
-        tag = ""
-        tflag = False
-        wflag = False
-        for c in range(len(word)):
-            if word[c] == "&":
-                tags.append(tag)
-                tflag = True
-                wflag = False
-            if tflag and not wflag:
-                tag = tag+word[c]
-                if tag == "&gt":
-                    wflag = True
-            if word[c] == ";":
-                tflag = False
-                wflag = True
-                tag = ""
-            elif wflag:
-                tag = tag+word[c]
-        # print(tags)
-        if len(tags) == 4:
-            word = tags[2]
+        match = re.match(words_w_num_regexp, text)
+        if match is not None:
+            print(match.group(0), "WORDNUM")
+            text = text[len(match.group(0)):]
+            if match.group(0):
+                array_of_tokens.append(match.group(0))
 
-    while (len(word) > 0) and (not word[-1].isalnum()):
-        word = word[:-1]
+        match = re.match(numer_regexp, text)
+        if match is not None:
+            print(match.group(0), "№")
+            text = text[len(match.group(0)):]
+            if match.group(0):
+                array_of_tokens.append(match.group(0))
 
-    while (len(word) > 0) and (not word[0].isalnum()):
-        word = word[1:]
+        match = re.match(number_regexp, text)
+        if match is not None:
+            print(match.group(0), "NUM")
+            text = text[len(match.group(0)):]
+            if match.group(0):
+                array_of_tokens.append(match.group(0))
 
-    return word
+        match = re.match(word_regexp, text)
+        if match is not None:
+            print(match.group(0), "WORD")
+            text = text[len(match.group(0)):]
+            if match.group(0):
+                array_of_tokens.append(match.group(0))
+
+        match = re.match(big_word_regexp, text)
+        if match is not None:
+            print(match.group(0), "BIG WORD")
+            text = text[len(match.group(0)):]
+            if match.group(0):
+                array_of_tokens.append(match.group(0))
+
+        match = re.match(space_regexp, text)
+        if match is not None:
+            print(match.group(0), "SPACE")
+            text = text[len(match.group(0)):]
+            if match.group(0):
+                array_of_tokens.append(match.group(0))
+
+        match = re.match(punct_regexp, text)
+        if match is not None:
+            print(match.group(0), "PUNCT")
+            text = text[len(match.group(0)):]
+            if match.group(0):
+                array_of_tokens.append(match.group(0))
+
+    # print(array_of_tokens)
+    return array_of_tokens, file_class, file_name
 
 
 def stemm(word: str):
@@ -107,10 +145,9 @@ def lemm(word: str, pos):
     return lem
 
 
-def pos(word: str):
-    pos_tag = nltk.pos_tag([word])
+def pos(words: str):
+    pos_tag = nltk.pos_tag(words)
     # print(pos_tag)
-    pos_tag = pos_tag[0][1]
     return pos_tag
 
 

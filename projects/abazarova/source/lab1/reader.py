@@ -1,28 +1,38 @@
 import csv
+import os
 from pathlib import Path
 
 
 def read_from_file(paths):
     path = Path(str(Path(Path.cwd()))[:-len("source.lab1")], "assets", "resources", paths)
     # print(path)
-    file = []
+    files = []
     with open(path, 'r', newline='') as csvfile:
         lines = csv.reader(csvfile, delimiter='\n', quotechar='|')
         for row in lines:
-            file.append(row)
-    return file
+            files.append(row)
+    return files
 
 
-def write_to_file(paths, d, tags):
+def write_to_file(paths, tok, tags):
     # print(paths)
     path = (paths.split(sep="."))[0]
-    new_path = Path(str(Path(Path.cwd()))[:-len("source.lab1")], "assets", "annotated-corpus", path+".tsv")
-    # print(new_path)
-    # print(csv.list_dialects())
-    with open(new_path, 'w', newline="\n") as tsvfile:
-        writer = csv.writer(tsvfile, dialect='excel-tab')
-        for t in sorted(d):
-            if(tags):
-                writer.writerow([t, d[t][1], d[t][2], d[t][0]])
-            else:
-                writer.writerow([t, d[t][1], d[t][2]])
+    for t in tok:
+        new_path = Path(str(Path(Path.cwd()))[:-len("source.lab1")], "assets",
+                        "annotated-corpus", path, t[0], t[1]+".tsv")
+        path_to_main_folders = Path(str(Path(Path.cwd()))[:-len("source.lab1")],
+                                    "assets", "annotated-corpus", path)
+        path_to_class_folders = Path(str(Path(Path.cwd()))[:-len("source.lab1")],
+                                     "assets", "annotated-corpus", path, t[0])
+        # print(new_path)
+        if not os.path.exists(path_to_main_folders):
+            os.mkdir(path_to_main_folders)
+        if not os.path.exists(path_to_class_folders):
+            os.mkdir(path_to_class_folders)
+        with open(new_path, 'w+', newline="\n") as tsvfile:
+            writer = csv.writer(tsvfile, dialect='excel-tab')
+            for i in range(len(t[2])):
+                if tags:
+                    writer.writerow([t[2][i][0], t[3][i], t[4][i], t[2][i][1]])
+                else:
+                    writer.writerow([t[2][i][0], t[3][i], t[4][i]])
