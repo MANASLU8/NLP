@@ -204,7 +204,7 @@ from task1.tokenizer import tokenize_text
     (":-)", TokenTag.EMOTICON, True),
     (":(", TokenTag.EMOTICON, True),
     (":'(", TokenTag.EMOTICON, True),
-    ("¯\(ツ)/¯", TokenTag.EMOTICON, True),
+    ("¯\\(ツ)/¯", TokenTag.EMOTICON, True),
     # --- PGP ---
     ("-----BEGIN PGP SIGNED MESSAGE-----", TokenTag.PGP_BEGINNING, True),
     ("""-----BEGIN PGP SIGNATURE-----
