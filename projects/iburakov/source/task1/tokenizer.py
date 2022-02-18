@@ -40,7 +40,7 @@ _abbreviations = (
     r")"
 )
 
-_case_dependant_tags = {}
+_case_dependant_tags = {TokenTag.PERSON_NAME}
 
 
 def _get_re_flags(tag: str):
@@ -53,6 +53,7 @@ _TOKEN_MATCHERS = {k: re.compile(v, _get_re_flags(k)) for k, v in {
     TokenTag.PGP_BEGINNING: r"-----BEGIN PGP SIGNED MESSAGE-----",
     TokenTag.PGP_PUBLIC_KEY: r"-----BEGIN PGP PUBLIC KEY BLOCK-----.*?-----END PGP PUBLIC KEY BLOCK-----",
     TokenTag.PGP_SIGNATURE: r"-----BEGIN PGP SIGNATURE-----.*?-----END PGP SIGNATURE-----",
+    TokenTag.PERSON_NAME: r"([A-Z]\.\s?([A-Z]([a-z]+|\.)\s?)?[A-Z][a-z]+)",
     TokenTag.URL_EMAIL: _url,
     TokenTag.MONEY: rf"{_number}{_currency_sep}{_currencies}|{_currencies}{_currency_sep}{_number}",
     TokenTag.PHONE_NUMBER: r"(\(\+?\d+\)|\+|\d+-)[\- ]*(\(?\d+\)?[\- ]?)+(\s*(ext\.|/)\s*\d+)?",
@@ -60,7 +61,7 @@ _TOKEN_MATCHERS = {k: re.compile(v, _get_re_flags(k)) for k, v in {
     TokenTag.EMOTICON: _emoticons,
     TokenTag.NUMBER: rf"(?<!\w){_number}(?!\w)",
     TokenTag.PUNCT_COMMA: r",",
-    TokenTag.ABBREVIATION: rf"{_abbreviations}\.",
+    TokenTag.ABBREVIATION: rf"(?<!\w){_abbreviations}\.",
     TokenTag.PUNCT_SENTENCE: r"\.{1,3}|[!?]+",
     TokenTag.PUNCT_BRACES: r"[()]",
     TokenTag.PUNCT_QUOTES: r"[\"”“`‘´’‚,„»«]",

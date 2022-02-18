@@ -175,6 +175,25 @@ from task1.tokenizer import tokenize_text
     (")", TokenTag.PUNCT_BRACES, True),
     (",", TokenTag.PUNCT_COMMA, True),
     (":", TokenTag.PUNCT_COLON, True),
+    # --- ABBREVIATION ---
+    ("i.e.", TokenTag.ABBREVIATION, True),
+    ("Ltd.", TokenTag.ABBREVIATION, True),
+    ("Plc.", TokenTag.ABBREVIATION, True),
+    ("Dr.", TokenTag.ABBREVIATION, True),
+    ("Tel.", TokenTag.ABBREVIATION, True),
+    ("Prof.", TokenTag.ABBREVIATION, True),
+    ("U.S.", TokenTag.ABBREVIATION, True),
+    ("U.K.", TokenTag.ABBREVIATION, True),
+    ("St.", TokenTag.ABBREVIATION, True),
+    ("Inc.", TokenTag.ABBREVIATION, True),
+    ("Mr.", TokenTag.ABBREVIATION, True),
+    ("Corp.", TokenTag.ABBREVIATION, True),
+    # --- NAME.PERSON ---
+    ("D. H. Brahms", TokenTag.PERSON_NAME, True),
+    ("D.H. Brahms", TokenTag.PERSON_NAME, True),
+    ("D.H.Brahms", TokenTag.PERSON_NAME, True),
+    ("D. Henry Brahms", TokenTag.PERSON_NAME, True),
+    ("D. Brahms", TokenTag.PERSON_NAME, True),
     # --- EMOTICON ---
     (":3", TokenTag.EMOTICON, True),
     (":)", TokenTag.EMOTICON, True),
@@ -186,8 +205,6 @@ from task1.tokenizer import tokenize_text
     (":(", TokenTag.EMOTICON, True),
     (":'(", TokenTag.EMOTICON, True),
     ("¯\(ツ)/¯", TokenTag.EMOTICON, True),
-    # --- PUNCT ---
-
     # --- PGP ---
     ("-----BEGIN PGP SIGNED MESSAGE-----", TokenTag.PGP_BEGINNING, True),
     ("""-----BEGIN PGP SIGNATURE-----
