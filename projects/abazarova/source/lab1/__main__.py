@@ -17,7 +17,7 @@ def token(paths, pos_tags=False):
     # print(files)
     tokens = []
     for file in files:
-        rez=tokenize(file[0])
+        rez = tokenize(file[0])
         # file_class, file_name, array_of_tokens
         tokens.append([rez[1], rez[2], rez[0]])
     # print(tokens)

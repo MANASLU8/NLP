@@ -13,17 +13,18 @@ nltk.download('averaged_perceptron_tagger')
 node_sep = r'","'
 
 word_regexp = r'^[a-z]+\'?[a-z]*'
-big_word_regexp = r'^[A-Z]+[a-z]*\'?[a-z]*'
-red_word_regexp = r'^[A-Za-z]*(\.[A-Za-z]+)+\.?'
-space_regexp = r'[ ]+'
-punct_regexp = r'(\.\.\.|[\"\*=\'_,.!?;:\(\)\-\\\/\#\$]|\-\-|\"\")+'
+big_word_regexp = r'^[A-Za-z]+\'?[a-z]*'
+red_word_regexp = r'^[A-Za-z]+(\.[A-Za-z]+)+\.?'
+space_regexp = r'[ \\]+'
+punct_regexp = r'(\.\.\.|[\"\*=\'_,.!?;:\(\)\-\/\#\$]|\-\-|\"\")+'
 site_regexp = r'(https?:\/\/)?([A-Za-z]*\.)+(com|net)(\/[A-Za-z0-9\.]*)*\/?'
 money_regexp = r'\$[0-9]*(,?[0-9]{3})*\.?[0-9]*([kbmKBM]|bn| [Bb]illion| [Mm]illion| [Hh]undred| [Tt]housand)?'
 numer_regexp = r'(#[0-9]+|\'[0-9]+|[0-9]+(th|nd|rd|st)|No. [0-9]+)'
 number_regexp = r'-?[0-9]+.?[0-9]*|([0-9]+ )?[0-9]+(\/?[0-9]+)?'
-tag_regexp = r'(\&lt;.*\&gt;(.*\&lt;\/.*\&gt;)?|\&gt;|\&lt;)'
-words_w_num_regexp = r'[0-9A-Za-z]+'
+tag_regexp = r'(\&lt;[^(\&lt;)(\&gt;)]*\&gt;|\&gt;|\&lt;)'
+words_w_num_regexp = r'([0-9]+[a-zA-Z]+|[a-zA-Z]+[0-9]+)+'
 date_regexp = r'[1-2][0-9]{3}\/[0-1][0-9]\/[0-3][0-9]'
+other_regexp = r'.{1}'
 
 
 def tokenize1(text: str):
@@ -33,6 +34,18 @@ def tokenize1(text: str):
 
 
 def tokenize(file: str):
+    regs = []
+    regs.append((site_regexp, "SITE"))
+    regs.append((tag_regexp, "TAG"))
+    regs.append((date_regexp, "DATE"))
+    regs.append((money_regexp, "MONEY"))
+    regs.append((words_w_num_regexp, "WORDNUM"))
+    regs.append((numer_regexp, "№"))
+    regs.append((number_regexp, "NUM"))
+    regs.append((red_word_regexp, "REDUCT"))
+    regs.append((big_word_regexp, "BIG"))
+    regs.append((word_regexp, "WORD"))
+    regs.append((punct_regexp, "PUNCT"))
     # Шаг 1: делим строку на части - то, что внутри кавычек, получаем текст для анализа
     array_of_nodes = re.compile(node_sep).split(file)
     array_of_nodes[0] = array_of_nodes[0][1:]
@@ -50,89 +63,25 @@ def tokenize(file: str):
     array_of_tokens = []
     while len(text) > 0:
         print(text)
-        match = re.match(tag_regexp, text)
-        if match is not None:
-            print(match.group(0), "TAG")
-            text = text[len(match.group(0)):]
-            if match.group(0):
-                array_of_tokens.append(match.group(0))
-
-        match = re.match(red_word_regexp, text)
-        if match is not None:
-            print(match.group(0), "RED")
-            text = text[len(match.group(0)):]
-            if match.group(0):
-                array_of_tokens.append(match.group(0))
-
-        match = re.match(site_regexp, text)
-        if match is not None:
-            print(match.group(0), "SITE")
-            text = text[len(match.group(0)):]
-            if match.group(0):
-                array_of_tokens.append(match.group(0))
-
-        match = re.match(date_regexp, text)
-        if match is not None:
-            print(match.group(0), "DATE")
-            text = text[len(match.group(0)):]
-            if match.group(0):
-                array_of_tokens.append(match.group(0))
-
-        match = re.match(money_regexp, text)
-        if match is not None:
-            print(match.group(0), "MON")
-            text = text[len(match.group(0)):]
-            if match.group(0):
-                array_of_tokens.append(match.group(0))
-
-        match = re.match(words_w_num_regexp, text)
-        if match is not None:
-            print(match.group(0), "WORDNUM")
-            text = text[len(match.group(0)):]
-            if match.group(0):
-                array_of_tokens.append(match.group(0))
-
-        match = re.match(numer_regexp, text)
-        if match is not None:
-            print(match.group(0), "№")
-            text = text[len(match.group(0)):]
-            if match.group(0):
-                array_of_tokens.append(match.group(0))
-
-        match = re.match(number_regexp, text)
-        if match is not None:
-            print(match.group(0), "NUM")
-            text = text[len(match.group(0)):]
-            if match.group(0):
-                array_of_tokens.append(match.group(0))
-
-        match = re.match(word_regexp, text)
-        if match is not None:
-            print(match.group(0), "WORD")
-            text = text[len(match.group(0)):]
-            if match.group(0):
-                array_of_tokens.append(match.group(0))
-
-        match = re.match(big_word_regexp, text)
-        if match is not None:
-            print(match.group(0), "BIG WORD")
-            text = text[len(match.group(0)):]
-            if match.group(0):
-                array_of_tokens.append(match.group(0))
-
-        match = re.match(space_regexp, text)
-        if match is not None:
-            print(match.group(0), "SPACE")
-            text = text[len(match.group(0)):]
-            if match.group(0):
-                array_of_tokens.append(match.group(0))
-
-        match = re.match(punct_regexp, text)
-        if match is not None:
-            print(match.group(0), "PUNCT")
-            text = text[len(match.group(0)):]
-            if match.group(0):
-                array_of_tokens.append(match.group(0))
+        flag = False
+        for r in regs:
+            if not flag:
+                match = re.match(r[0], text)
+                if match is not None:
+                    print(match.group(0), r[1])
+                    text = text[len(match.group(0)):]
+                    if match.group(0):
+                        array_of_tokens.append(match.group(0))
+                    flag = True
+        if not flag:
+            match = re.match(space_regexp, text)
+            if match is not None:
+                print(match.group(0), "SPACE")
+                text = text[len(match.group(0)):]
+                flag = True
+        if not flag:
+            print(text, "can't read")
+            return
 
     # print(array_of_tokens)
     return array_of_tokens, file_class, file_name
