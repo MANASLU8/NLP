@@ -1,8 +1,8 @@
 import pandas as pd
 from pytest import mark
 
-from task1.tokenizer import tokenize_text
 from task1.token_tag import TokenTag
+from task1.tokenizer import tokenize_text
 
 
 @mark.parametrize("raw_text,expected_token_tag,should_exist", [
@@ -65,7 +65,6 @@ from task1.token_tag import TokenTag
     ("US$          40.00", TokenTag.MONEY, True),
     ("$", TokenTag.MONEY, False),
     ("$$", TokenTag.MONEY, False),
-    ("$", TokenTag.MONEY, False),
     # --- PHONE NUMBER ---
     ("(602)-554-2685", TokenTag.PHONE_NUMBER, True),
     ("(619)455-8600", TokenTag.PHONE_NUMBER, True),
@@ -174,6 +173,7 @@ from task1.token_tag import TokenTag
     ("«", TokenTag.PUNCT_QUOTES, True),
     ("(", TokenTag.PUNCT_BRACES, True),
     (")", TokenTag.PUNCT_BRACES, True),
+    (",", TokenTag.PUNCT_COMMA, True),
     (":", TokenTag.PUNCT_COLON, True),
     # --- EMOTICON ---
     (":3", TokenTag.EMOTICON, True),
@@ -223,7 +223,8 @@ def test_individual_tokens_are_parsed_correctly(raw_text: str, expected_token_ta
 
 
 @mark.parametrize("raw_text,expected_token_tag,expected_count", [
-    ("What?! There's no way: too quick... Reset it, faster!", TokenTag.PUNCT_SENTENCE, 4),
+    ("What?! There's no way: too quick... Reset it, faster!", TokenTag.PUNCT_SENTENCE, 3),
+    ("What?! There's no way: too quick... Reset it, faster!", TokenTag.PUNCT_COMMA, 1),
     ("What?! There's no way: too quick... Reset it, faster!", TokenTag.PUNCT_COLON, 1),
     ("What?! There's no way: too quick... Reset it, faster!", TokenTag.WORD, 9),
     ("It's a 3D thing.", TokenTag.NUMBER, 0),
@@ -271,7 +272,7 @@ _EXAMPLE_TOKENS = pd.DataFrame([
     ("3D", TokenTag.WORD),
     ("!", TokenTag.PUNCT_SENTENCE),
     ("No", TokenTag.WORD),
-    (",", TokenTag.PUNCT_SENTENCE),
+    (",", TokenTag.PUNCT_COMMA),
     ("that's", TokenTag.WORD),
     ("actually", TokenTag.WORD),
     ("not", TokenTag.WORD),
@@ -281,7 +282,7 @@ _EXAMPLE_TOKENS = pd.DataFrame([
     ("google.com", TokenTag.URL_EMAIL),
     (".", TokenTag.PUNCT_SENTENCE),
     ("Btw", TokenTag.WORD),
-    (",", TokenTag.PUNCT_SENTENCE),
+    (",", TokenTag.PUNCT_COMMA),
     ("selling", TokenTag.WORD),
     ("cookies", TokenTag.WORD),
     (":)", TokenTag.EMOTICON),
@@ -304,13 +305,13 @@ _EXAMPLE_TOKENS = pd.DataFrame([
     ("AGN", TokenTag.WORD),
     ("A", TokenTag.WORD),
     ("man", TokenTag.WORD),
-    (",", TokenTag.PUNCT_SENTENCE),
+    (",", TokenTag.PUNCT_COMMA),
     ("a", TokenTag.WORD),
     ("plan", TokenTag.WORD),
-    (",", TokenTag.PUNCT_SENTENCE),
+    (",", TokenTag.PUNCT_COMMA),
     ("a", TokenTag.WORD),
     ("canal", TokenTag.WORD),
-    (",", TokenTag.PUNCT_SENTENCE),
+    (",", TokenTag.PUNCT_COMMA),
     ("Bob", TokenTag.WORD),
     (".", TokenTag.PUNCT_SENTENCE),
 ], columns=["token", "tag"])
