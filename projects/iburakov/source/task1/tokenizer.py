@@ -28,8 +28,27 @@ _emoticons = "(" + "|".join(re.escape(
     "(._.),(>_<),(*_*),(¬_¬),ಠ_ಠ,ಠ︵ಠ,(ಠ_ಠ),¯\(ツ)/¯,:0,:1,:3"
 ).split(",")) + ")"  # based on spaCy's emoticons
 
+# based on https://github.com/stanfordnlp/CoreNLP/blob/f05cb54ec0a4f3c90395771817f44a81eb549baf/src/edu/stanford/nlp/process/PTBLexer.flex#L690
+_abbreviations = (
+    r"("
+    r"inc|co|corp|ltd|plc|rt|bancorp|bhd|assn|univ|intl|sys|tel|est|ext|sq|jr|sr|bros|(Ed|Ph)\.D|[BDM]\.Sc|LL\.[BDM]|"
+    r"Sci|etc|ect|al|seq|orig|incl|eg|avg|pl|lb|min|max|cit|u\.s|u\.k|Mr|Mrs|Ms|Mx|[M]iss|Drs?|Profs?|Sens?|Reps?|"
+    r"Attys?|Lt|Col|Gen|Messrs|Govs?|Adm|Rev|Fr|Rt|Maj|Sgt|Cpl|Pvt|Capt|St[ae]?|Ave|Pres|Lieut|Rt|Hon|Brig|Co?mdr|Pfc|"
+    r"Spc|Supts?|Det|Mt|Ft|Adj|Adv|Asst|Assoc|Ens|Insp|Mlle|Mme|Msgr|Sfc|Amb|S[m][t]|Ven|Br|EngInvt|Elec|Natl|M[ft]g|"
+    r"Dept|Blvd|Rd|Ave|[P][l]|viz|Exhs?|ass't|Govt|Wm|Jos|Cie|cf|TREAS|P[h]|[S][c]|syn|def|Mk|Soc|vs|a\.k\.a|sect?s?|"
+    r"prop|op|approx|pt|i\.e|e\.g"
+    r")"
+)
+
+_case_dependant_tags = {}
+
+
+def _get_re_flags(tag: str):
+    return re.DOTALL | re.IGNORECASE if tag not in _case_dependant_tags else re.DOTALL
+
+
 # tag -> regexp, sorted by precedence
-_TOKEN_MATCHERS = {k: re.compile(v, re.DOTALL | re.IGNORECASE) for k, v in {
+_TOKEN_MATCHERS = {k: re.compile(v, _get_re_flags(k)) for k, v in {
     TokenTag.QUOTE_HEADER: rf"(In (article )?(<{_url}>,?\s*)?)?{_url}\s*(\((\s*({_word}\.?|-+)){{1,8}}\s*\) )?writes",
     TokenTag.PGP_BEGINNING: r"-----BEGIN PGP SIGNED MESSAGE-----",
     TokenTag.PGP_PUBLIC_KEY: r"-----BEGIN PGP PUBLIC KEY BLOCK-----.*?-----END PGP PUBLIC KEY BLOCK-----",
@@ -41,6 +60,7 @@ _TOKEN_MATCHERS = {k: re.compile(v, re.DOTALL | re.IGNORECASE) for k, v in {
     TokenTag.EMOTICON: _emoticons,
     TokenTag.NUMBER: rf"(?<!\w){_number}(?!\w)",
     TokenTag.PUNCT_COMMA: r",",
+    TokenTag.ABBREVIATION: rf"{_abbreviations}\.",
     TokenTag.PUNCT_SENTENCE: r"\.{1,3}|[!?]+",
     TokenTag.PUNCT_BRACES: r"[()]",
     TokenTag.PUNCT_QUOTES: r"[\"”“`‘´’‚,„»«]",

@@ -186,6 +186,8 @@ from task1.tokenizer import tokenize_text
     (":(", TokenTag.EMOTICON, True),
     (":'(", TokenTag.EMOTICON, True),
     ("¯\(ツ)/¯", TokenTag.EMOTICON, True),
+    # --- PUNCT ---
+
     # --- PGP ---
     ("-----BEGIN PGP SIGNED MESSAGE-----", TokenTag.PGP_BEGINNING, True),
     ("""-----BEGIN PGP SIGNATURE-----
@@ -231,6 +233,7 @@ def test_individual_tokens_are_parsed_correctly(raw_text: str, expected_token_ta
     ("His birthday is 1987-03-01.", TokenTag.NUMBER, 0),
     ("Don't be \"nice\", that's too artificial.", TokenTag.WORD, 6),
     ("Don't be \"nice\", that's too artificial.", TokenTag.PUNCT_QUOTES, 2),
+    ("Dr. Martin told us to avoid shady companies, i.e. Pepsi Co. Ltd., QIWI Plc. and so.", TokenTag.PUNCT_SENTENCE, 1),
 ])
 def test_tokens_in_context_are_parsed_correctly(raw_text: str, expected_token_tag: str, expected_count: int):
     result = tokenize_text(raw_text)
@@ -293,8 +296,7 @@ _EXAMPLE_TOKENS = pd.DataFrame([
     ("John", TokenTag.WORD),
     ("Hesse", TokenTag.WORD),
     ("jhesse@netcom.com", TokenTag.URL_EMAIL),
-    ("Tel", TokenTag.WORD),
-    (".", TokenTag.PUNCT_SENTENCE),
+    ("Tel.", TokenTag.ABBREVIATION),
     (":", TokenTag.PUNCT_COLON),
     ("+49-40-54715-224 ext.4", TokenTag.PHONE_NUMBER),
     ("Fax", TokenTag.WORD),
