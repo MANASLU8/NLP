@@ -10,19 +10,20 @@ nltk.download('wordnet')
 nltk.download('omw-1.4')
 nltk.download('averaged_perceptron_tagger')
 
-node_sep = r''
+node_sep = r'","'
 
 word_regexp = r'^[a-z]+\'?[a-z]*'
 big_word_regexp = r'^[A-Z]+[a-z]*\'?[a-z]*'
 red_word_regexp = r'^[A-Za-z]*(\.[A-Za-z]+)+\.?'
 space_regexp = r'[ ]+'
-punct_regexp = r'(\.\.\.|[\*=\'_,.!?;:\(\)\-\\\/]|\-\-)'
+punct_regexp = r'(\.\.\.|[\"\*=\'_,.!?;:\(\)\-\\\/\#\$]|\-\-|\"\")+'
 site_regexp = r'(https?:\/\/)?([A-Za-z]*\.)+(com|net)(\/[A-Za-z0-9\.]*)*\/?'
 money_regexp = r'\$[0-9]*(,?[0-9]{3})*\.?[0-9]*([kbmKBM]|bn| [Bb]illion| [Mm]illion| [Hh]undred| [Tt]housand)?'
 numer_regexp = r'(#[0-9]+|\'[0-9]+|[0-9]+(th|nd|rd|st)|No. [0-9]+)'
 number_regexp = r'-?[0-9]+.?[0-9]*|([0-9]+ )?[0-9]+(\/?[0-9]+)?'
-tag_regexp = r'(\&lt;.*\&gt;|\&lt;.*\&\\gt;)'
+tag_regexp = r'(\&lt;.*\&gt;(.*\&lt;\/.*\&gt;)?|\&gt;|\&lt;)'
 words_w_num_regexp = r'[0-9A-Za-z]+'
+date_regexp = r'[1-2][0-9]{3}\/[0-1][0-9]\/[0-3][0-9]'
 
 
 def tokenize1(text: str):
@@ -33,9 +34,9 @@ def tokenize1(text: str):
 
 def tokenize(file: str):
     # Шаг 1: делим строку на части - то, что внутри кавычек, получаем текст для анализа
-    array_of_nodes = re.findall(node_regexp, file)
-    for i in range(len(array_of_nodes)):
-        array_of_nodes[i] = array_of_nodes[i][1:-1]
+    array_of_nodes = re.compile(node_sep).split(file)
+    array_of_nodes[0] = array_of_nodes[0][1:]
+    array_of_nodes[-1] = array_of_nodes[-1][:-1]
     # print("***tokenize***NODES")
     # print(*array_of_nodes, sep="\n")
     # return
@@ -66,6 +67,13 @@ def tokenize(file: str):
         match = re.match(site_regexp, text)
         if match is not None:
             print(match.group(0), "SITE")
+            text = text[len(match.group(0)):]
+            if match.group(0):
+                array_of_tokens.append(match.group(0))
+
+        match = re.match(date_regexp, text)
+        if match is not None:
+            print(match.group(0), "DATE")
             text = text[len(match.group(0)):]
             if match.group(0):
                 array_of_tokens.append(match.group(0))
@@ -133,7 +141,7 @@ def tokenize(file: str):
 def stemm(word: str):
     stemmer = SnowballStemmer("english")
     stem = stemmer.stem(word)
-    # print(stem)
+    print(stem)
     return stem
 
 
@@ -141,13 +149,13 @@ def lemm(word: str, pos):
     # print(word, pos)
     lemmer = WordNetLemmatizer()
     lem = lemmer.lemmatize(word, pos=get_wordnet_pos(pos))
-    # print(lem)
+    print(lem)
     return lem
 
 
 def pos(words: str):
     pos_tag = nltk.pos_tag(words)
-    # print(pos_tag)
+    print(pos_tag)
     return pos_tag
 
 

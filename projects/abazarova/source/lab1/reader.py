@@ -15,7 +15,7 @@ def read_from_file(paths):
 
 
 def write_to_file(paths, tok, tags):
-    # print(paths)
+    print(paths)
     path = (paths.split(sep="."))[0]
     for t in tok:
         new_path = Path(str(Path(Path.cwd()))[:-len("source.lab1")], "assets",
@@ -24,7 +24,7 @@ def write_to_file(paths, tok, tags):
                                     "assets", "annotated-corpus", path)
         path_to_class_folders = Path(str(Path(Path.cwd()))[:-len("source.lab1")],
                                      "assets", "annotated-corpus", path, t[0])
-        # print(new_path)
+        print(new_path)
         if not os.path.exists(path_to_main_folders):
             os.mkdir(path_to_main_folders)
         if not os.path.exists(path_to_class_folders):

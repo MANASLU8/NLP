@@ -21,23 +21,25 @@ def token(paths, pos_tags=False):
         # file_class, file_name, array_of_tokens
         tokens.append([rez[1], rez[2], rez[0]])
     # print(tokens)
+    print("TOKENS FINISHED")
     # Для корректной работы лемматайзера, нужно получить POS-теги
     for tok in tokens:
         tok[2] = pos(tok[2])
-
+    print("POS FINISHED")
     # Получаем стеммы - используем токены, которые получили перед этим
     for tok in tokens:
         stem = []
         for i in range(len(tok[2])):
             stem.append(stemm(tok[2][i][0]))
         tok.append(stem)
+    print("STEMS FINISHED")
     # Получаем леммы - тут надо использовать теги, которые мы до этого получили
     for tok in tokens:
         lem = []
         for i in range(len(tok[2])):
             lem.append(lemm(tok[2][i][0], tok[2][i][1]))
         tok.append(lem)
-
+    print("LEMS FINISHED")
     # for tok in tokens:
         # print("**********")
         # for i in range(len(tok[2])):
