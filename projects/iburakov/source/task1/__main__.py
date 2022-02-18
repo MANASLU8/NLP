@@ -5,6 +5,7 @@ from dirs import dataset_dir, annotated_corpus_dir
 from task1.lemmatizer import add_lemmas_to_tokens_dataframe
 from task1.newsgroup_message import read_newsgroup_message
 from task1.stemmer import add_stems_to_tokens_dataframe
+from task1.token_tag import TokenTag
 from task1.tokenizer import tokenize_text
 
 message_files = list(dataset_dir.glob("*/*/*"))
@@ -31,14 +32,20 @@ for i, filepath in enumerate(message_files):
         msg = read_newsgroup_message(filepath)
         print(f"Tokenizing text...", end=" ")
         tokens = tokenize_text(msg.body)
+        assert len(tokens), "No tokens found! Empty text?"
         print(f"Stemming...", end=" ")
         add_stems_to_tokens_dataframe(tokens)
         print(f"Lemmatizing...")
         add_lemmas_to_tokens_dataframe(tokens)
+
         print(f"Writing result to {target_filename}...")
-        tokens[["tag", "token", "stem", "lemma"]].to_csv(
-            target_filename, sep="\t", index=False, header=False,
-        )
+        tsv_columns_order = ["token", "stem", "lemma", "tag"]
+        tsv = tokens[tsv_columns_order].to_csv(sep="\t", index=False, header=False, line_terminator="\n")
+        # split sentences with extra line break
+        tsv = tsv.replace(TokenTag.PUNCT_SENTENCE, TokenTag.PUNCT_SENTENCE + "\n")
+        with target_filename.open("w", encoding="utf8") as f:
+            f.write(tsv)
+
         print(f"Done in {(perf_counter() - start_time) * 1000:.3f} ms!")
     except Exception as e:
         print(f"Failed with {e.__class__.__name__}: {e}.")
