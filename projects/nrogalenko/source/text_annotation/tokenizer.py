@@ -1,8 +1,8 @@
 import re
 import enum
-from token_info import TokenInfo
-from lemmatizer import wordnet_lemmatize
-from stemmer import create_stem
+from .token_info import TokenInfo
+from .lemmatizer import wordnet_lemmatize
+from .stemmer import create_stem
 
 
 class TokenTag(enum.Enum):
@@ -24,7 +24,7 @@ class TokenTag(enum.Enum):
 
 
 patterns = {
-    TokenTag.abbreviations: r'(?i)(((inc|corp|st|dr|tel|no|ltd|co|mr|mrs|etc|all)\.)|(u\.s\.|u\.k\.|e\.g\.?)|((?<=\s)[a-z]{1,3}\.(?=\s[a-z])))',
+    TokenTag.abbreviations: r'(?i)(((calif|ky|inc|corp|st|dr|tel|no|ltd|co|mr|mrs|etc|all)\.)|(u\.s\.|u\.k\.|e\.g\.?)|((?<=\s)[a-z]{1,5}\.(?=\s[a-z])))',
     TokenTag.phone: r'(\([0-9]{3}\)\s?|[0-9]{3}-)[0-9]{3}-[0-9]{4}',
     TokenTag.ordinal: r'[0-9]+-?(th|TH|\'s)',
     TokenTag.metrics: r'[0-9]+[-A-Za-z]+',
@@ -44,7 +44,7 @@ patterns = {
 
 def tokenize(line):
     text_parts = line.split('","')
-    news_header_tokens = tokenize_news_text(text_parts[1])
+    news_header_tokens = tokenize_news_text(text_parts[1] + ".")
     news_text_tokens = tokenize_news_text(text_parts[2][:-2])
     tokens = news_header_tokens + news_text_tokens
     return tokens

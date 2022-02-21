@@ -1,5 +1,5 @@
 import os
-import tokenizer
+from .tokenizer import tokenize
 
 
 def process_file(path, output_dir_name):
@@ -8,14 +8,14 @@ def process_file(path, output_dir_name):
         line = f.readline()
         while line:
             try:
-                tokens_list = tokenizer.tokenize(line)
+                tokens_list = tokenize(line)
                 label = line.split('","')[0][1:]
-                output_dir_path = "../../assets/" + output_dir_name + "/" + label + "/"
+                output_dir_path = "../assets/" + output_dir_name + "/" + label + "/"
                 if not os.path.exists(output_dir_path):
                     os.makedirs(output_dir_path)
                 f_out = open(output_dir_path + str(lines_counter) + '.tsv', 'w+')
                 f_out.truncate(0)
-                print(tokens_list)
+                print(lines_counter)
                 for token in tokens_list:
                     if token.token_tag != "whitespace":
                         f_out.write(str(token) + '\n')
