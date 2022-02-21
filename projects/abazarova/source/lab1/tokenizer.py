@@ -18,11 +18,11 @@ red_word_regexp = r'^[A-Za-z]+(\.[A-Za-z]+)+\.?'
 space_regexp = r'[ \\]+'
 punct_regexp = r'(\.\.\.|[\"\*=\'_,.!?;:\(\)\-\/\#\$]|\-\-|\"\")+'
 site_regexp = r'(https?:\/\/)?([A-Za-z]*\.)+(com|net)(\/[A-Za-z0-9\.]*)*\/?'
-money_regexp = r'\$[0-9]*(,?[0-9]{3})*\.?[0-9]*([kbmKBM]|bn| [Bb]illion| [Mm]illion| [Hh]undred| [Tt]housand)?'
+money_regexp = r'\$[0-9]+(,[0-9]{3})*(\.[0-9]+)?([kbmKBM]| [Bb]illion| [Mm]illion| [Hh]undred| [Tt]housand)?'
 numer_regexp = r'(#[0-9]+|\'[0-9]+|[0-9]+(th|nd|rd|st)|No. [0-9]+)'
-number_regexp = r'-?[0-9]+.?[0-9]*|([0-9]+ )?[0-9]+(\/?[0-9]+)?'
+number_regexp = r'-?[0-9]+(,?[0-9]{3})*(\/[0-9]+|\.[0-9]+|( [0-9]+\/[0-9]+){1})?'
 tag_regexp = r'(\&lt;[^(\&lt;)(\&gt;)]*\&gt;|\&gt;|\&lt;)'
-words_w_num_regexp = r'([0-9]+[a-zA-Z]+|[a-zA-Z]+[0-9]+)+'
+words_w_num_regexp = r'([0-9]+[a-zA-Z]+[0-9]*|[a-zA-Z]+[0-9]+[a-zA-z]*)+'
 date_regexp = r'[1-2][0-9]{3}\/[0-1][0-9]\/[0-3][0-9]'
 other_regexp = r'.{1}'
 
@@ -39,8 +39,8 @@ def tokenize(file: str):
     regs.append((tag_regexp, "TAG"))
     regs.append((date_regexp, "DATE"))
     regs.append((money_regexp, "MONEY"))
-    regs.append((words_w_num_regexp, "WORDNUM"))
     regs.append((numer_regexp, "№"))
+    regs.append((words_w_num_regexp, "WORDNUM"))
     regs.append((number_regexp, "NUM"))
     regs.append((red_word_regexp, "REDUCT"))
     regs.append((big_word_regexp, "BIG"))
@@ -80,8 +80,8 @@ def tokenize(file: str):
                 text = text[len(match.group(0)):]
                 flag = True
         if not flag:
-            print(text, "can't read")
-            return
+            print(text, "can't read\n\n\n")
+            text = text[1:]
 
     # print(array_of_tokens)
     return array_of_tokens, file_class, file_name

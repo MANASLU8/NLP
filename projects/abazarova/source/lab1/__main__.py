@@ -13,7 +13,8 @@ def main():
 @click.argument("paths", type=str)
 @click.argument("pos_tags", type=bool, required=False)
 def token(paths, pos_tags=False):
-    files = read_from_file(paths)
+    path = Path(str(Path(Path.cwd()))[:-len("source.lab1")], "assets", "resources", paths)
+    files = read_from_file(path)
     # print(files)
     tokens = []
     for file in files:

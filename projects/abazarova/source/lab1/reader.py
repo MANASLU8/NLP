@@ -3,8 +3,7 @@ import os
 from pathlib import Path
 
 
-def read_from_file(paths):
-    path = Path(str(Path(Path.cwd()))[:-len("source.lab1")], "assets", "resources", paths)
+def read_from_file(path):
     # print(path)
     files = []
     with open(path, 'r', newline='') as csvfile:
