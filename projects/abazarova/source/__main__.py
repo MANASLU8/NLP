@@ -41,13 +41,20 @@ def token(paths, pos_tags=False):
         tok.append(lem)
     print("LEMS FINISHED")
     # for tok in tokens:
-        # print("**********")
-        # for i in range(len(tok[2])):
-            # print(tok[2][i][0], tok[3][i], tok[4][i])
+    # print("**********")
+    #   for i in range(len(tok[2])):
+    #       print(tok[2][i][0], tok[3][i], tok[4][i])
 
     # print(*tokens, sep="\n")
 
     write_to_file(paths, tokens, pos_tags)
+
+
+@main.command()
+@click.argument("paths", type=str)
+@click.argument("hirsh", type=bool, required=False)
+def typo(paths, pos_tags=True):
+    pass
 
 
 if __name__ == "__main__":
