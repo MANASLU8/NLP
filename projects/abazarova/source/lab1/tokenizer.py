@@ -102,7 +102,7 @@ def lemm(word: str, pos):
     return lem
 
 
-def pos(words: str):
+def pos(words):
     pos_tag = nltk.pos_tag(words)
     print(pos_tag)
     return pos_tag

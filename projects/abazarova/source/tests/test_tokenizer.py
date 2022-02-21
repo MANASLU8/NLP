@@ -86,6 +86,20 @@ class TestTokenizer(unittest.TestCase):
         self.assertEqual(["2", ".", "?!"], tokenize('"1","2","?!"')[0])
         self.assertEqual(["2", ".", "a", ",", "b", "?", "c", "!", "d", ";"], tokenize('"1","2","a,b? c! d;"')[0])
 
+    def test_stem(self):
+        self.assertEqual("go", stemm("going"))
+        self.assertEqual("student", stemm("students"))
+        self.assertEqual("123", stemm("123"))
+
+    def test_pos(self):
+        self.assertEqual([("I", "PRP"), ("am", "VBP"), ("going", "VBG"), ("to", "TO"), ("school", "NN")],
+                         pos(["I", "am", "going", "to", "school"]))
+
+    def test_lemm(self):
+        self.assertEqual("go", lemm("going", "VBG"))
+        self.assertEqual("be", lemm("am", "VBP"))
+        self.assertEqual("student", lemm("students", "NN"))
+
 
 if __name__ == "__main__":
     unittest.main()

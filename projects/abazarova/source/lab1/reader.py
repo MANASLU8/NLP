@@ -3,7 +3,8 @@ import os
 from pathlib import Path
 
 
-def read_from_file(path):
+def read_from_file(paths):
+    path = Path(str(Path(Path.cwd()))[:-len("source")], "assets", "resources", paths)
     # print(path)
     files = []
     with open(path, 'r', newline='') as csvfile:
@@ -17,11 +18,11 @@ def write_to_file(paths, tok, tags):
     print(paths)
     path = (paths.split(sep="."))[0]
     for t in tok:
-        new_path = Path(str(Path(Path.cwd()))[:-len("source.lab1")], "assets",
+        new_path = Path(str(Path(Path.cwd()))[:-len("source")], "assets",
                         "annotated-corpus", path, t[0], t[1]+".tsv")
-        path_to_main_folders = Path(str(Path(Path.cwd()))[:-len("source.lab1")],
+        path_to_main_folders = Path(str(Path(Path.cwd()))[:-len("source")],
                                     "assets", "annotated-corpus", path)
-        path_to_class_folders = Path(str(Path(Path.cwd()))[:-len("source.lab1")],
+        path_to_class_folders = Path(str(Path(Path.cwd()))[:-len("source")],
                                      "assets", "annotated-corpus", path, t[0])
         print(new_path)
         if not os.path.exists(path_to_main_folders):
