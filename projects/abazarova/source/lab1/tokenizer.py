@@ -16,7 +16,8 @@ word_regexp = r'^[a-z]+\'?[a-z]*'
 big_word_regexp = r'^[A-Za-z]+\'?[a-z]*'
 red_word_regexp = r'^[A-Za-z]+(\.[A-Za-z]+)+\.?'
 space_regexp = r'[ \\]+'
-punct_regexp = r'(\.\.\.|[\"\*=\'_,.!?;:\(\)\-\/\#\$]|\-\-|\"\")+'
+sep_regexp = r'\.\.\.|[\.!?]+'
+punct_regexp = r'([\"\*=\'_,;:\(\)\-\/\#\$]|\-\-|\"\")+'
 site_regexp = r'(https?:\/\/)?([A-Za-z]*\.)+(com|net)(\/[A-Za-z0-9\.]*)*\/?'
 money_regexp = r'\$[0-9]+(,[0-9]{3})*(\.[0-9]+)?([kbmKBM]| [Bb]illion| [Mm]illion| [Hh]undred| [Tt]housand)?'
 numer_regexp = r'(#[0-9]+|\'[0-9]+|[0-9]+(th|nd|rd|st)|No. [0-9]+)'
@@ -46,6 +47,7 @@ def tokenize(file: str):
     regs.append((big_word_regexp, "BIG"))
     regs.append((word_regexp, "WORD"))
     regs.append((punct_regexp, "PUNCT"))
+
     # Шаг 1: делим строку на части - то, что внутри кавычек, получаем текст для анализа
     array_of_nodes = re.compile(node_sep).split(file)
     array_of_nodes[0] = array_of_nodes[0][1:]
@@ -78,6 +80,14 @@ def tokenize(file: str):
             if match is not None:
                 print(match.group(0), "SPACE")
                 text = text[len(match.group(0)):]
+                flag = True
+        if not flag:
+            match = re.match(sep_regexp,text)
+            if match is not  None:
+                print(match.group(0), "SEP")
+                text = text[len(match.group(0)):]
+                array_of_tokens.append(match.group(0))
+                array_of_tokens.append("\n")
                 flag = True
         if not flag:
             print(text, "can't read\n\n\n")

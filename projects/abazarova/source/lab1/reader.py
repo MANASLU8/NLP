@@ -19,7 +19,7 @@ def write_to_file(paths, tok, tags):
     path = (paths.split(sep="."))[0]
     for t in tok:
         new_path = Path(str(Path(Path.cwd()))[:-len("source")], "assets",
-                        "annotated-corpus", path, t[0], t[1]+".tsv")
+                        "annotated-corpus", path, t[0], t[1] + ".tsv")
         path_to_main_folders = Path(str(Path(Path.cwd()))[:-len("source")],
                                     "assets", "annotated-corpus", path)
         path_to_class_folders = Path(str(Path(Path.cwd()))[:-len("source")],
@@ -32,7 +32,10 @@ def write_to_file(paths, tok, tags):
         with open(new_path, 'w+', newline="\n") as tsvfile:
             writer = csv.writer(tsvfile, dialect='excel-tab')
             for i in range(len(t[2])):
-                if tags:
-                    writer.writerow([t[2][i][0], t[3][i], t[4][i], t[2][i][1]])
+                if t[2][i][0] == "\n":
+                    writer.writerow([])
                 else:
-                    writer.writerow([t[2][i][0], t[3][i], t[4][i]])
+                    if tags:
+                        writer.writerow([t[2][i][0], t[3][i], t[4][i], t[2][i][1]])
+                    else:
+                        writer.writerow([t[2][i][0], t[3][i], t[4][i]])
