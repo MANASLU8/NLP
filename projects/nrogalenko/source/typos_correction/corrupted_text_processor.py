@@ -1,4 +1,3 @@
-import os
 import glob
 from source.text_annotation.tokenizer import tokenize
 from .tokens_dictionary_creator import get_words_dictionary_list
@@ -26,7 +25,6 @@ def process_corrupted_file(path, annotation_documents_dir_path):
                 tokens_count_in_document_annotation = len(tokens_from_document_annotation)
                 tokens_list = tokenize(line)
                 tokens_list = [token for token in tokens_list if token.token_tag != "whitespace"]
-                label = line.split('","')[0]
                 print(lines_counter)
                 # print(tokens_from_document_annotation)
                 # print([token.token for token in tokens_list])

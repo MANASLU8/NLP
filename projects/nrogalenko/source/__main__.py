@@ -7,10 +7,11 @@ def main():
     nltk.download('wordnet')
     nltk.download('averaged_perceptron_tagger')
     nltk.download('punkt')
-    # process_file('../assets/train.csv', 'train')
-    # process_file('../assets/test.csv', 'test')
+    # lab 1
+    process_file('../assets/train.csv', 'train')
+    process_file('../assets/test.csv', 'test')
+    # lab 2
     process_corrupted_file("../assets/test-corrupted.csv", "../assets/test")
-    # fix_typo_with_dictionary("set", ["sat", "srt", "sxt"])
 
 
 if __name__ == "__main__":
