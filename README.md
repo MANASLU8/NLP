@@ -28,3 +28,4 @@
 | [msokolov](/projects/msokolov) | Соколов Максим Владимирович |
 | [abazarova](/projects/abazarova) | Базарова Анна Александровна |
 | [nrogalenko](/projects/nrogalenko) | Рогаленко Никита Александрович |
+| [dima-chernykh](/projects/dima-chernykh) | Черных Дмитрий Сергеевич |
