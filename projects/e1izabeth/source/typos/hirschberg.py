@@ -4,10 +4,10 @@ from multiprocessing import Pool
 
 import pandas as pd
 
-from tokenizer.tokenizer.tokenizer import tokenize_text
+from mytokenizer.tokenizer import tokenize_text
+from typos.__main__ import DICT_NAME
 
-gap_penalty = dict(
-    [(chr(ord('A') + x), 2) for x in range(0, ord('Z') - ord('A') + 1)])  # {'A': 1, 'T': 2, 'G': 1, 'C': 3}
+gap_penalty = dict([(chr(ord('A') + x), 2) for x in range(0, ord('Z') - ord('A') + 1)])
 qwerty = ["qwertyuiop".upper(), "asdfghjkl".upper(), "zxcvbnm".upper()]
 sim_matrix = dict(
     [(chr(ord('A') + y), dict([(chr(ord('A') + x), 0) for x in range(0, ord('Z') - ord('A') + 1)])) for y in
@@ -44,7 +44,6 @@ def fill_sim_matrix():
     fill_sim_pair('e', 'i', 1)
     fill_sim_pair('c', 'k', 1)
     fill_sim_pair('w', 'v', 1)
-
 
 def needlman_wunsch(A, B):
     # fill zero-matrix
@@ -178,9 +177,9 @@ def test():
     print()
 
 
-def load_dict():
+def load_dict(name):
     ww = set()
-    df = 'D:\\cygwin64\\home\\Ged\\ptn\\source\\assets\\dictionary-dedup'
+    df = '../assets/' + name
     sz = os.path.getsize(df)
     with open(df) as f:
         print('loading ', df)
@@ -217,25 +216,21 @@ def write_dict(ww, fname):
 def find_match(dictionary, key, count=0):
     results = []
     best_result = None
-    # n = 0
     if key in dictionary:
         return key, key, 0
     else:
-        for wl in range(len(key) - 1, len(key) + 2):
-            wd = dictionary.get(wl)
-            if not wd is None:
-                for word in wd:
-                    # n = n + 1
-                    # if n%100 == 0:
-                    # print('\t', n / len(dictionary) * 100, '%')
-                    p = hirschberg(word, key)
-                    if best_result is None or p[2] < best_result[2]:
-                        best_result = p
-                    if count > 0:
-                        results.append(p)
-                        if len(results) > count:
-                            results.sort(key=lambda c: c[2])
-                            results.pop()
+        for word in dictionary:
+            #n = n + 1
+            #if n%100 == 0:
+                #print('\t', n / len(dictionary) * 100, '%')
+            p = hirschberg(word, key)
+            if best_result is None or p[2] < best_result[2]:
+                best_result = p
+            if count > 0:
+                results.append(p)
+                if len(results) > count:
+                    results.sort(key=lambda c: c[2])
+                    results.pop()
     if count > 0:
         results.sort(key=lambda c: c[2])
         results.reverse()
@@ -304,7 +299,8 @@ def process_file(d, fname):
 
 if __name__ == '__main__':
     fill_sim_matrix()
-    dictionary = load_dict()
-    process_file(dictionary, 'D:\\github.com\\NLP\\projects\\e1izabeth\\assets\\raw-dataset\\test-corrupted.csv')
-    # writeDict(loadDict(), 'D:\\github.com\\NLP\\projects\\e1izabeth\\assets\\dictionary-dedup')
-    # doInteractive()
+    dict_name = '../assets/dictionary-dedup'
+    # writeDict(loadDict(), '../assets/dictionary-dedup')
+    dictionary = load_dict('../assets/' + DICT_NAME)
+    process_file(dictionary, '../assets/raw-dataset/test-corrupted.csv')
+    # do_interactive()

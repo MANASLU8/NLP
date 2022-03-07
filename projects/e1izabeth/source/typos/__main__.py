@@ -5,7 +5,7 @@ from pathlib import Path
 import pandas as pd
 import regex
 
-from tokenizer.tokenizer.tokenizer import tokenize_text
+from mytokenizer.tokenizer import tokenize_text
 
 classes = dict([
     (1, 'World'),
@@ -14,9 +14,10 @@ classes = dict([
     (4, 'Sci-Tech')
 ])
 
+DICT_NAME = 'dictionary'
 
 def create_dictionary(dirnames_annotated):
-    with open('../assets/dictionary', "w") as dictionary_file:
+    with open('../assets/DICT_NAME', "w") as dictionary_file:
         for dir in dirnames_annotated:
             print('processing ', dir)
             ff = listdir(dir)
@@ -107,12 +108,12 @@ def main():
     fname_corrupted = '../assets/raw-dataset/test-corrupted.csv'
     fname_source = '../assets/raw-dataset/test.csv'
     fname_fixed = '../assets/raw-dataset/test-corrupted.csv.h.out' #test-corrupted.csv.td.out
-    fname_dictionary = '../assets/dictionary-no-dedup'
+    fname_dictionary = '../assets/dictionary-no-dedup' # '../assets/' + DICT_NAME
     dirnames_annotated = ['../assets/train/Business', '../assets/train/World', '../assets/train/Sports',
                           '../assets/train/Sci-Tech']
 
-    #create_dictionary(dirnames_annotated)
-    #process_file(fname_dictionary, fname_corrupted)
+    create_dictionary(dirnames_annotated)
+    process_file(fname_dictionary)
     score(fname_source, fname_corrupted, fname_fixed)
 
 

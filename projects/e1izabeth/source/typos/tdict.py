@@ -1,14 +1,12 @@
-import argparse
 import os.path
 import re
-import time
-import io
 import math
 from multiprocessing import Pool
 
 import pandas as pd
 
-from tokenizer.tokenizer.tokenizer import tokenize_text
+from mytokenizer.tokenizer import tokenize_text
+from typos.__main__ import DICT_NAME
 
 qwerty = ["qwertyuiop", "asdfghjkl", "zxcvbnm"]
 allchars = "".join(qwerty)
@@ -137,7 +135,7 @@ class TreeDict:
     def load(self, fname):
         print()
 
-    def __extraCharPenalty(self, key, s, k):
+    def __extra_char_penalty(self, key, s, k):
         sk = sim_matrix[k]
         if s.pos == 0:
             p = sk[key[0]]
@@ -147,7 +145,7 @@ class TreeDict:
             p = min(sk[key[s.pos]], sk[key[s.pos + 1]])
         return p
 
-    def __skipCharPenalty(self, key, s):
+    def __skip_char_penalty(self, key, s):
         sk = sim_matrix[key[s.pos]]
         if s.pos == 0:
             p = sk[key[1]]
@@ -220,17 +218,15 @@ def test():
     # d.save('d:\\temp\\test.txt')
 
     # r = d.match("mhoue")
-    r = d.match("mouse")
-    for c in r:
-        print(c)
+    r = d.match("mouse").best_match.naked_value()
+    print(r)
 
 
-def load_dictionary():
+def load_dictionary(path):
     d = TreeDict()
-    df = 'D:\\github.com\\NLP\\projects\\e1izabeth\\assets\\dictionary-dedup'
-    sz = os.path.getsize(df)
-    with open(df) as f:
-        print('loading ', df)
+    sz = os.path.getsize(path)
+    with open(path) as f:
+        print('loading ', path)
         line = f.readline()
         n = 0
         while line:
@@ -304,7 +300,9 @@ def process_file(d, fname):
 
 if __name__ == '__main__':
     fill_sim_matrix()
-    d = load_dictionary()
-    do_interactive()
-    #process_file(d, 'D:\\github.com\\NLP\\projects\\e1izabeth\\assets\\raw-dataset\\test-corrupted.csv')
+    path = '../assets' + DICT_NAME #'../assets/dictionary-dedup'
+    #d = load_dictionary(path)
+    #do_interactive()
+    #process_file(d, '../assets/raw-dataset/test-corrupted.csv')
+    test()
 
