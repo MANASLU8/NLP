@@ -21,7 +21,7 @@ def lev_vag_fish(seq1: str, seq2: str, hirsch=False):
             )
     # print(matrix)
     if hirsch:
-        return  matrix[size_x - 1]
+        return matrix[size_x - 1]
     return matrix[size_x - 1, size_y-1]
 
 

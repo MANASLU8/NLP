@@ -49,6 +49,7 @@ def tokenize(file: str):
     regs.append((punct_regexp, "PUNCT"))
 
     # Шаг 1: делим строку на части - то, что внутри кавычек, получаем текст для анализа
+    file=re.sub(r'"+', '"', file)
     array_of_nodes = re.compile(node_sep).split(file)
     array_of_nodes[0] = array_of_nodes[0][1:]
     array_of_nodes[-1] = array_of_nodes[-1][:-1]
@@ -59,18 +60,20 @@ def tokenize(file: str):
     file_name = re.sub(r'[^A-Za-z0-9]+', "_", array_of_nodes[1])
     if file_name[-1] == "_":
         file_name = file_name[:-1]
+    if file_name[0] == "_":
+        file_name = file_name[1:]
     text = str(array_of_nodes[1] + ". " + array_of_nodes[2])
     # print(text)
     # Шаг 2: по шаблонам выделяем токены и записываем в список токенов
     array_of_tokens = []
     while len(text) > 0:
-        print(text)
+        # print(text)
         flag = False
         for r in regs:
             if not flag:
                 match = re.match(r[0], text)
                 if match is not None:
-                    print(match.group(0), r[1])
+                    # print(match.group(0), r[1])
                     text = text[len(match.group(0)):]
                     if match.group(0):
                         array_of_tokens.append(match.group(0))
@@ -78,19 +81,19 @@ def tokenize(file: str):
         if not flag:
             match = re.match(space_regexp, text)
             if match is not None:
-                print(match.group(0), "SPACE")
+                # print(match.group(0), "SPACE")
                 text = text[len(match.group(0)):]
                 flag = True
         if not flag:
             match = re.match(sep_regexp,text)
             if match is not  None:
-                print(match.group(0), "SEP")
+                # print(match.group(0), "SEP")
                 text = text[len(match.group(0)):]
                 array_of_tokens.append(match.group(0))
                 array_of_tokens.append("\n")
                 flag = True
         if not flag:
-            print(text, "can't read\n\n\n")
+            # print(text, "can't read\n\n\n")
             text = text[1:]
 
     # print(array_of_tokens)
@@ -100,7 +103,7 @@ def tokenize(file: str):
 def stemm(word: str):
     stemmer = SnowballStemmer("english")
     stem = stemmer.stem(word)
-    print(stem)
+    # print(stem)
     return stem
 
 
@@ -108,13 +111,13 @@ def lemm(word: str, pos):
     # print(word, pos)
     lemmer = WordNetLemmatizer()
     lem = lemmer.lemmatize(word, pos=get_wordnet_pos(pos))
-    print(lem)
+    # print(lem)
     return lem
 
 
 def pos(words):
     pos_tag = nltk.pos_tag(words)
-    print(pos_tag)
+    # print(pos_tag)
     return pos_tag
 
 
