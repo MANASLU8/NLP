@@ -129,6 +129,11 @@ def typo(path_t, path_d, path_c, percent, algo):
     print("Из них опечаток осталось: ", num_tok_cant)
 
 
+@main.command()
+@click.argument("paths", type=str)
+def vector(paths, pos_tags=False):
+    pass
+
 if __name__ == "__main__":
     main()
 
