@@ -64,7 +64,7 @@ def token(paths, pos_tags=False):
 @click.argument("percent", type=int)
 @click.argument("algo", type=str, required=False)
 def typo(path_t, path_d, path_c, percent, algo):
-    print("Алгоритм:", algo, "Процент: ", percent)
+    print("Процент: ", percent)
     files = read_from_file(path_t)
     tok_d = read_from_file(path_d)
     cor_files = read_from_file(path_c)
