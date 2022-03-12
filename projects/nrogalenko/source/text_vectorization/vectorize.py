@@ -2,7 +2,8 @@ import os
 import json
 import math
 from nltk.corpus import stopwords
-from sklearn.decomposition import PCA
+from .reduce import pca_reduce
+from .cosine import cosine_distance
 from source.util.file_utils import get_tokens_list_with_token_tags_from_document_annotation,\
     matrix_header_csv_string_to_list, get_file_lines_number
 from source.util.rle_encoder import rle_encode, rle_decode
@@ -92,14 +93,8 @@ def tokenize_with_filter(text):
     return tokens_list
 
 
-def reduce_text_vector(vector, dim):
-    pca = PCA(n_components=dim)
-    result = pca.transform(vector)
-    return result
-
-
 # using tf-idf
-def vectorize_custom_text(text, fr_dict, matrix_file):
+def vectorize_custom_text(text, matrix_file):
     tokens_list = tokenize_with_filter(text)
     total_documents_amount = get_file_lines_number(matrix_file) - 2  # two first rows are headers
     f = open(matrix_file, "r")
@@ -120,6 +115,16 @@ def vectorize_custom_text(text, fr_dict, matrix_file):
     return text_vector
 
 
-def process_text_for_vectorization(text, dict_file, matrix_file):
-    words_dict = read_word_dict_to_dict(dict_file)
-    return vectorize_custom_text(text, words_dict, matrix_file)
+def use_tdidf_model(matrix_file, token_to_test, similar_tokens, same_field_tokens, other_tokens):
+    print("Custom tf-idf vectorization")
+    all_tokens = []
+    all_tokens.append(token_to_test)
+    all_tokens = all_tokens + similar_tokens + same_field_tokens + other_tokens
+    # fit a 2d PCA model to the vectors
+    x = [vectorize_custom_text(token, matrix_file) for token in all_tokens]
+    reduced_embeddings = pca_reduce(x, 2)
+    print("Cosine distance " + all_tokens[0])
+    for i in range(1, len(all_tokens)):
+        print("\twith " + all_tokens[i] + ": " + str(cosine_distance(reduced_embeddings[0], reduced_embeddings[i])))
+    return reduced_embeddings, all_tokens
+

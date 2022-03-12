@@ -1,6 +1,5 @@
 from gensim.models import Word2Vec
 from .vectorize import tokenize_with_filter
-from matplotlib import pyplot
 from .cosine import cosine_distance
 from .reduce import pca_reduce
 
@@ -28,38 +27,27 @@ def w2v_train(training_file):
     model.save('../assets/w2v-train-model_100_5.bin')
 
 
-def use_model():
+def use_w2v_model(model_path, token_to_test, similar_tokens, same_field_tokens, other_tokens):
     # load model
-    model = Word2Vec.load('../assets/w2v-train-model_100_5.bin')
+    model = Word2Vec.load(model_path)
     print(model)
-    chosen_tokens = ["football"]
-    similar_tokens = [["basketball", "volleyball"]]
-    same_field_tokens = [["sport", "game", "man"]]
-    other_tokens = [["weekend", "bombing", "russia", "woman", "trump", "university"]]
     all_tokens = []
-    for token in chosen_tokens:
-        print("Token: " + token)
-        all_tokens.append(token)
-        print("Similar tokens:")
-        for similar_token in similar_tokens[chosen_tokens.index(token)]:
-            all_tokens.append(similar_token)
-            print("\t" + similar_token + ": " + str(cosine_distance(model.wv.get_vector(token), model.wv.get_vector(similar_token))))
-        print("Same field tokens:")
-        for same_field_token in same_field_tokens[chosen_tokens.index(token)]:
-            all_tokens.append(same_field_token)
-            print("\t" + same_field_token + ": " + str(cosine_distance(model.wv.get_vector(token), model.wv.get_vector(same_field_token))))
-        print("Other tokens:")
-        for other_token in other_tokens[chosen_tokens.index(token)]:
-            all_tokens.append(other_token)
-            print("\t" + other_token + ": " + str(cosine_distance(model.wv.get_vector(token), model.wv.get_vector(other_token))))
-    # print(model.wv.most_similar("football"))
+    print("Token: " + token_to_test)
+    all_tokens.append(token_to_test)
+    print("Similar tokens:")
+    for similar_token in similar_tokens:
+        all_tokens.append(similar_token)
+        print("\t" + similar_token + ": " + str(cosine_distance(model.wv.get_vector(token_to_test), model.wv.get_vector(similar_token))))
+    print("Same field tokens:")
+    for same_field_token in same_field_tokens:
+        all_tokens.append(same_field_token)
+        print("\t" + same_field_token + ": " + str(cosine_distance(model.wv.get_vector(token_to_test), model.wv.get_vector(same_field_token))))
+    print("Other tokens:")
+    for other_token in other_tokens:
+        all_tokens.append(other_token)
+        print("\t" + other_token + ": " + str(cosine_distance(model.wv.get_vector(token_to_test), model.wv.get_vector(other_token))))
     # fit a 2d PCA model to the vectors
     x = [model.wv.get_vector(token) for token in all_tokens]
     result = pca_reduce(x, 2)
-    # create a scatter plot of the projection
-    pyplot.scatter(result[:, 0], result[:, 1])
-    words = all_tokens
-    for i, word in enumerate(words):
-        pyplot.annotate(word, xy=(result[i, 0], result[i, 1]))
-    pyplot.show()
+    return result, all_tokens
 
