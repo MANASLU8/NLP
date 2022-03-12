@@ -2,6 +2,7 @@ import os
 import json
 import math
 from nltk.corpus import stopwords
+from sklearn.decomposition import PCA
 from source.util.file_utils import get_tokens_list_with_token_tags_from_document_annotation,\
     matrix_header_csv_string_to_list, get_file_lines_number
 from source.util.rle_encoder import rle_encode, rle_decode
@@ -91,6 +92,12 @@ def tokenize_with_filter(text):
     return tokens_list
 
 
+def reduce_text_vector(vector, dim):
+    pca = PCA(n_components=dim)
+    result = pca.transform(vector)
+    return result
+
+
 # using tf-idf
 def vectorize_custom_text(text, fr_dict, matrix_file):
     tokens_list = tokenize_with_filter(text)
@@ -109,11 +116,10 @@ def vectorize_custom_text(text, fr_dict, matrix_file):
                                int(dictionary_words_total_docs_num_list[dictionary_words_list.index(term)]))
         tf_idf_value = tf_value * idf_value
         text_vector.append(round(tf_idf_value, 3))
-    print(text_vector)
+    # print(text_vector)
     return text_vector
 
 
 def process_text_for_vectorization(text, dict_file, matrix_file):
     words_dict = read_word_dict_to_dict(dict_file)
-    vectorize_custom_text(text, words_dict, matrix_file)
-
+    return vectorize_custom_text(text, words_dict, matrix_file)
