@@ -10,7 +10,7 @@ class VectorizationTest(unittest.TestCase):
         tokens_dict = {"apple": 2, "dog": 1, "cat": 1, "ball": 2, "door": 1, "window": 1}
         self.assertEqual(
             [0.0, 0.075, 0.0, 0.0, 0.075, 0.075],
-            vectorize_custom_text("dog, ball door window", "../../assets/t.csv")
+            [round(component, 3) for component in vectorize_custom_text("dog, ball door window", "../../assets/t.csv")]
         )
 
     def test_rle_encode(self):

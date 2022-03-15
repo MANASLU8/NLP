@@ -32,3 +32,18 @@ def test_w2v_and_tfidf_models(model_path, tf_idf_matrix_file):
                                                          other_tokens[chosen_tokens.index(token)])
         # print(reduced_embeddings)
         create_plot("custom tf-idf - " + token, reduced_embeddings, all_tokens)
+
+
+def test_different_w2v_models(model_paths):
+    chosen_tokens = ["football", "washington", "company"]
+    similar_tokens = [["basketball", "hockey", "soccer"], ["california", "boston", "chicago"], ["firm", "business", "agency"]]
+    same_field_tokens = [["sport", "players", "game"], ["london", "paris", "moscow"], ["organization", "bank", "economy"]]
+    other_tokens = [["bombing", "russia", "trump"], ["consumer", "device", "computer"], ["football", "coach", "players"]]
+    for token in chosen_tokens:
+        for model_path in model_paths:
+            reduced_embeddings, all_tokens = use_w2v_model(model_path, token,
+                                                           similar_tokens[chosen_tokens.index(token)],
+                                                           same_field_tokens[chosen_tokens.index(token)],
+                                                           other_tokens[chosen_tokens.index(token)])
+            create_plot("Model: " + model_path + " Token: " + token, reduced_embeddings, all_tokens)
+

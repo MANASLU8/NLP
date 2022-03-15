@@ -101,7 +101,8 @@ def vectorize_custom_text(text, matrix_file):
     dictionary_words_list = matrix_header_csv_string_to_list(f.readline())
     # print(dictionary_words_list)
     dictionary_words_total_docs_num_row = f.readline()
-    dictionary_words_total_docs_num_list = rle_decode(dictionary_words_total_docs_num_row[(text.find(',') + 1):-1])
+    dictionary_words_total_docs_num_list =\
+        rle_decode(dictionary_words_total_docs_num_row[(dictionary_words_total_docs_num_row.find(',')):-1])
     text_vector = []
     # print(dictionary_words_list)
     # print(dictionary_words_total_docs_num_list)
@@ -110,9 +111,28 @@ def vectorize_custom_text(text, matrix_file):
         idf_value = math.log10(total_documents_amount /
                                int(dictionary_words_total_docs_num_list[dictionary_words_list.index(term)]))
         tf_idf_value = tf_value * idf_value
-        text_vector.append(round(tf_idf_value, 3))
+        text_vector.append(tf_idf_value)
     # print(text_vector)
     return text_vector
+
+
+# getting tf-idf based on whole sample
+def get_single_word_tf_idf(word, dict_file, matrix_file):
+    words_dict = read_word_dict_to_dict(dict_file)
+    total_documents_amount = get_file_lines_number(matrix_file) - 2  # two first rows are headers
+    f = open(matrix_file, "r")
+    dictionary_words_list = matrix_header_csv_string_to_list(f.readline())
+    dictionary_words_total_docs_num_row = f.readline()
+    dictionary_words_total_docs_num_list =\
+        rle_decode(dictionary_words_total_docs_num_row[(dictionary_words_total_docs_num_row.find(',')):-1])
+    if word in words_dict and word in dictionary_words_list:
+        tf_value = (words_dict[word]) / float(sum(words_dict.values()))
+        idf_value = math.log10(total_documents_amount /
+                               int(dictionary_words_total_docs_num_list[dictionary_words_list.index(word)]))
+        tf_idf_value = tf_value * idf_value
+        return tf_idf_value
+    else:
+        return None
 
 
 def use_tdidf_model(matrix_file, token_to_test, similar_tokens, same_field_tokens, other_tokens):
