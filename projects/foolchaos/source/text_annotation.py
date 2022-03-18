@@ -18,7 +18,7 @@ def process(path, dir_name):
                 if not os.path.exists(dir_path):
                     logging.info(f"dir created {dir_path}")
                     os.makedirs(dir_path)
-                f_out = open(dir_path + str(counter) + '.tsv', 'w+')
+                f_out = open(dir_path + str(line.split('","')[1]) + '.tsv', 'w+')
                 f_out.truncate(0)
                 for annotation in annotations:
                     if annotation.token_type != "whitespace":

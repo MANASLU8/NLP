@@ -14,6 +14,7 @@ def main():
     # lab - 1
     process('../assets/train.csv', 'train')
     process('../assets/test.csv', 'test')
+    process('../assets/fuck.csv', 'fuck')
 
 
 if __name__ == "__main__":
