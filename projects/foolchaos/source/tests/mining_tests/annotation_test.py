@@ -15,7 +15,7 @@ class AnnotationTest(TestCase):
 
     def test_annotation(self):
         annotations = annotate_text(
-            text="Let's start to eat these 1001 burgers, but after need to run 60kms to example.com and type 'hello' in word."
+            text="Let's start to eat these 1001 burgers, but after need to run 60kms to example.com and type 'sentence' in word."
         )
         expected_result = [
             Annotation("Let's", "Let", "Let's", "word"),
@@ -53,7 +53,7 @@ class AnnotationTest(TestCase):
             Annotation(" ", " ", " ", "whitespace"),
             Annotation("type", "type", "type", "word"),
             Annotation(" ", " ", " ", "whitespace"),
-            Annotation("'hello'", "hello", "'hello'", "quotation"),
+            Annotation("'sentence'", "sentenc", "'sentence'", "quotation"),
             Annotation(" ", " ", " ", "whitespace"),
             Annotation("in", "in", "in", "word"),
             Annotation(" ", " ", " ", "whitespace"),
