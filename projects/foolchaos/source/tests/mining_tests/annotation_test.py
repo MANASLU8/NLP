@@ -1,9 +1,8 @@
 from unittest import TestCase
 
 from nltk import download
-
-from projects.foolchaos.source.text_mining.annotation import annotate_text
-from projects.foolchaos.source.text_mining.models import Annotation
+from source.text_mining.annotation import annotate_text
+from source.text_mining.models import Annotation
 
 
 class AnnotationTest(TestCase):
