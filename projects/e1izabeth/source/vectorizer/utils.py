@@ -5,9 +5,6 @@ import numpy as np
 from matplotlib import pyplot
 from nltk.corpus import stopwords
 from sklearn.decomposition import PCA
-from scipy import spatial
-from numpy import dot
-from numpy.linalg import norm
 
 eng_stopwords = stopwords.words("english")
 
