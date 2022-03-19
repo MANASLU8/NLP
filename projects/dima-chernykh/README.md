@@ -22,14 +22,14 @@
 
 ## Запуск проекта
 
-```shell
+```shell 
 export PYTHONPATH=source
 python -m task1
 ```
 
 ## Запуск тестов
 
-```shell
+```shell 
 export PYTHONPATH=source
 python -m pytest source/tests 
 ```
