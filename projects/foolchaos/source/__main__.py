@@ -12,9 +12,9 @@ def main():
     nltk.download('omw-1.4')
 
     # lab - 1
-    process('../assets/train.csv', 'train')
-    process('../assets/test.csv', 'test')
-    process('../assets/fuck.csv', 'fuck')
+    # process('../assets/train.csv', 'train')
+    # process('../assets/test.csv', 'test')
+    process('../assets/simple.csv', 'simple')
 
 
 if __name__ == "__main__":

@@ -15,7 +15,7 @@ class AnnotationTest(TestCase):
 
     def test_annotation(self):
         annotations = annotate_text(
-            text="Let's start to eat these 1001 burgers, but after need to run 60kms to example.com and type 'sentence' in word."
+            text="Let's start to eat these 1001 burgers, but after need to run 60kms to example.com and type 'sentence' in word..."
         )
         expected_result = [
             Annotation("Let's", "Let", "Let's", "word"),
@@ -58,6 +58,6 @@ class AnnotationTest(TestCase):
             Annotation("in", "in", "in", "word"),
             Annotation(" ", " ", " ", "whitespace"),
             Annotation("word", "word", "word", "word"),
-            Annotation(".", ".", ".", "punctuation sign"),
+            Annotation("...", "...", "...", "punctuation sign"),
         ]
         self.assertEqual(annotations, expected_result)

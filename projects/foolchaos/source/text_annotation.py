@@ -18,11 +18,13 @@ def process(path, dir_name):
                 if not os.path.exists(dir_path):
                     logging.info(f"dir created {dir_path}")
                     os.makedirs(dir_path)
-                f_out = open(dir_path + str(line.split('","')[1]) + '.tsv', 'w+')
+                f_out = open(dir_path + str(counter) + '.tsv', 'w+')
                 f_out.truncate(0)
                 for annotation in annotations:
                     if annotation.token_type != "whitespace":
                         f_out.write(f"{annotation.token}\t{annotation.stem}\t{annotation.lemma}\n")
+                    if annotation.token in ['.', '!', '?', '...']:
+                        f_out.write('\n')
                 f_out.close()
             except Exception as ex:
                 logging.error(ex)
@@ -34,6 +36,6 @@ def process(path, dir_name):
 
 def annotate_news_text(line):
     splitted = line.split('","')
-    headers = annotate_text(splitted[1] + ".")
-    news = annotate_text(splitted[2][:-2])
+    headers = annotate_text(f"{splitted[1]}.")
+    news = annotate_text(f"{splitted[1]}. {splitted[2][:-2]}")
     return headers + news
