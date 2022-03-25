@@ -27,25 +27,29 @@ def _compare_token_sequences(real: DataFrame, fixed: DataFrame):
 
 
 def _process_filepath(filepath: Path):
-    *_, category, doc_id = filepath.parts
-    original_filepath = annotated_corpus_dir / "test" / category / f"{doc_id}.tsv"
+    try:
+        *_, category, doc_id = filepath.parts
+        original_filepath = annotated_corpus_dir / "test" / category / f"{doc_id}.tsv"
 
-    original_tokens = read_tokens_from_annotated_corpus_tsv(original_filepath)
-    corrupted_tokens = tokenize_text(read_newsgroup_message(filepath).body)
-    fixed_tokens = correct_misspelled_tokens(corrupted_tokens)
+        original_tokens = read_tokens_from_annotated_corpus_tsv(original_filepath)
+        corrupted_tokens = tokenize_text(read_newsgroup_message(filepath).body)
+        fixed_tokens = correct_misspelled_tokens(corrupted_tokens)
 
-    real_token_count, corrupted_match_count, corrupted_alignment = \
-        _compare_token_sequences(original_tokens, corrupted_tokens)
-    _, fixed_match_count, fixed_alignment = _compare_token_sequences(original_tokens, fixed_tokens)
+        real_token_count, corrupted_match_count, corrupted_alignment = \
+            _compare_token_sequences(original_tokens, corrupted_tokens)
+        _, fixed_match_count, fixed_alignment = _compare_token_sequences(original_tokens, fixed_tokens)
 
-    if _DEBUG_PRINTING:
-        comparison_df = DataFrame({"real": fixed_alignment.src,
-                                   "corrupted": corrupted_tokens.token,
-                                   "fixed": fixed_alignment.dest})
-        comparison_df["match"] = comparison_df.real == comparison_df.fixed
-        print(comparison_df)
+        if _DEBUG_PRINTING:
+            comparison_df = DataFrame({"real": fixed_alignment.src,
+                                       "corrupted": corrupted_tokens.token,
+                                       "fixed": fixed_alignment.dest})
+            comparison_df["match"] = comparison_df.real == comparison_df.fixed
+            print(comparison_df)
 
-    return real_token_count, corrupted_match_count, fixed_match_count
+        return real_token_count, corrupted_match_count, fixed_match_count
+    except Exception as e:
+        print(f"Exception for {filepath}, {e.__class__.__name__}: {e}")
+        return 0, 0, 0
 
 
 def _batcher(x, bs):
