@@ -33,3 +33,9 @@ def add_mapped_words_to_tokens_dataframe(df: DataFrame, new_column_name: str, wo
     df[new_column_name] = pd.NA
     df.loc[df.tag == TokenTag.WORD, new_column_name] = df.loc[df.tag == TokenTag.WORD].token.apply(word_mapper)
     df.loc[pd.isna(df[new_column_name]), new_column_name] = df.loc[pd.isna(df[new_column_name])].token
+
+
+def read_tokens_from_annotated_corpus_tsv(filepath_or_buf) -> DataFrame:
+    tokens = pd.read_csv(filepath_or_buf, sep="\t", header=None, keep_default_na=False)
+    tokens.columns = ["token", "stem", "lemma", "tag"]
+    return tokens[["token", "tag"]]

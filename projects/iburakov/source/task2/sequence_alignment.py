@@ -5,7 +5,7 @@ from numpy import zeros, ndarray, arange, array
 from pandas import DataFrame
 
 TItem = TypeVar("TItem")
-Alignment = List[Tuple[str, str]]
+Alignment = List[Tuple[TItem, TItem]]
 CostEvaluator = Callable[[TItem, TItem], Number]
 
 _INSERTION_COST = _DELETION_COST = 1

@@ -3,11 +3,11 @@ from collections import Counter
 import pandas as pd
 from pandas import DataFrame
 
-from dirs import annotated_corpus_dir
-from task1.token_tag import TokenTag
+from dirs import annotated_corpus_dir, token_dictionary_filepath
+from task1.utils import read_tokens_from_annotated_corpus_tsv
+from task2.spell_correction import CORRECTABLE_TOKEN_TAGS
 
-CORRECTABLE_TOKEN_TAGS = {TokenTag.PGP_BEGINNING, TokenTag.WORD, TokenTag.ABBREVIATION, TokenTag.PERSON_NAME}
-TOKEN_COUNT_THRESHOLD = 10
+TOKEN_COUNT_THRESHOLD = 3
 
 
 def _describe_token_df(df: DataFrame):
@@ -28,11 +28,9 @@ if __name__ == '__main__':
         log_prefix = f"({i + 1}/{len(files)})"
         print(f"{log_prefix} Processing {filepath}")
 
-        tokens = pd.read_csv(filepath, sep="\t", header=None, keep_default_na=False)
-        tokens.columns = ["token", "stem", "lemma", "tag"]
-
+        tokens = read_tokens_from_annotated_corpus_tsv(filepath)
         final_tokens = []
-        for token, tag in tokens[["token", "tag"]].values:
+        for token, tag in tokens.values:
             # lowering WORDs - disabled
             # final_tokens.append((token, tag) if tag != TokenTag.WORD else (token.lower(), tag))
             final_tokens.append((token, tag))
@@ -43,10 +41,9 @@ if __name__ == '__main__':
     print("Done!")
     _describe_token_df(df)
     print(f"Filtering. Tags: {CORRECTABLE_TOKEN_TAGS}, count threshold: {TOKEN_COUNT_THRESHOLD}")
-    df = df[df.tag.isin(CORRECTABLE_TOKEN_TAGS) & (df.counts > TOKEN_COUNT_THRESHOLD)]
+    df = df[df.tag.isin(CORRECTABLE_TOKEN_TAGS) & (df.counts >= TOKEN_COUNT_THRESHOLD)]
     print("Done!")
     _describe_token_df(df)
 
-    output_filename = annotated_corpus_dir / "tokens.tsv"
-    print(f"Writing tokens to {output_filename}.")
-    df.sort_values("counts", ascending=False).to_csv(output_filename, sep="\t", line_terminator="\n")
+    print(f"Writing tokens to {token_dictionary_filepath}.")
+    df.sort_values("counts", ascending=False).to_csv(token_dictionary_filepath, sep="\t", line_terminator="\n")
