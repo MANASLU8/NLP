@@ -7,6 +7,7 @@ from text_vectorization.vector_demo import test_w2v_and_tfidf_models, test_diffe
 from topic_modelling.data_preprocessing import build_csr_term_doc_matrix
 from topic_modelling.lda_model import train_lda_model, use_lda_model
 from topic_modelling.lda_visualize import create_plot
+from text_classification.svm_models import *
 
 
 def main():
@@ -52,6 +53,39 @@ def main():
                           "../assets/train-dict-improved.json", "../assets/train-td-matrix.npz", "../assets/train.csv",
                           "../assets/test-td-matrix.npz", top_words_to_display_num)
     create_plot("../assets/topic-modelling-results/perplexity")
+
+    # lab 5 - text classification
+    iterations_num_list = [100, 500, 1000, 5000, 10000, 20000, 30000, 40000, 50000, 60000, 80000]
+    for iterations_num in iterations_num_list:
+
+        train_svm_rbf_kernel("../assets/train-half.csv", "../assets/annotated-corpus/train-embeddings-half.tsv", iterations_num, "svm_rbf")
+        use_svm_model("../assets/svm-models/svm_model_rbf" + str(iterations_num) + ".jl",
+                      "../assets/test-half.csv",
+                     "../assets/annotated-corpus/test-embeddings-half.tsv", "../assets/svm-models-evaluation/svm_rbf", iterations_num)
+        
+        train_svm_linear_kernel("../assets/train-half.csv", "../assets/annotated-corpus/train-embeddings-half.tsv", iterations_num, "svm_linear")
+        use_svm_model("../assets/svm-models/svm_model_linear" + str(iterations_num) + ".jl",
+                      "../assets/test-half.csv",
+                      "../assets/annotated-corpus/test-embeddings-half.tsv", "../assets/svm-models-evaluation/svm_linear", iterations_num)
+        train_svm_sigmoid_kernel("../assets/train-half.csv", "../assets/annotated-corpus/train-embeddings-half.tsv", iterations_num, "svm_sigmoid")
+        use_svm_model("../assets/svm-models/svm_model_sigmoid" + str(iterations_num) + ".jl",
+                      "../assets/test-half.csv",
+                      "../assets/annotated-corpus/test-embeddings-half.tsv", "../assets/svm-models-evaluation/svm_sigmoid", iterations_num)
+
+        train_svm_poly_kernel("../assets/train-half.csv", "../assets/annotated-corpus/train-embeddings-half.tsv", iterations_num, "svm_poly3", 3)
+        use_svm_model("../assets/svm-models/svm_model_poly3_" + str(iterations_num) + ".jl",
+                      "../assets/test-half.csv",
+                      "../assets/annotated-corpus/test-embeddings-half.tsv", "../assets/svm-models-evaluation/svm_poly3", iterations_num)
+
+    # experiments with vector dimensions reduction
+    vector_dims = [100, 85, 70, 55, 30, 15, 5]
+    for dim in vector_dims:
+        use_model_with_dim_reduction_scale_after("../assets/svm-models/svm_model_rbf50000.jl", dim, "svm_rbf50000_reduced",
+                                     "../assets/test-half.csv", "../assets/annotated-corpus/test-embeddings-half.tsv",
+                                     "../assets/train-half.csv", "../assets/annotated-corpus/train-embeddings-half.tsv")
+        use_model_with_dim_reduction_scale_before("../assets/svm-models/svm_model_rbf50000.jl", dim, "svm_rbf50000_reduced_scale_before",
+                                     "../assets/test-half.csv", "../assets/annotated-corpus/test-embeddings-half.tsv",
+                                     "../assets/train-half.csv", "../assets/annotated-corpus/train-embeddings-half.tsv")
 
 
 if __name__ == "__main__":
