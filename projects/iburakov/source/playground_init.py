@@ -6,11 +6,16 @@ from dirs import dataset_dir
 from task1.newsgroup_message import read_newsgroup_message
 from task1.stemmer import get_word_stem, add_stems_to_tokens_dataframe
 from task1.tokenizer import tokenize_text
+from task2.qwerty_weighting import get_qwerty_weighted_substitution_cost
+from task2.sequence_alignment import get_alignment_and_wagner_fischer_matrix, get_optimal_alignment_hirschberg, \
+    alignment_to_strings, get_edit_distance, evaluate_alignment_edit_distance
 
 pd.set_option("display.max_rows", 2000)
 
 # noinspection PyStatementEffect
-tokenize_text, get_word_stem, add_stems_to_tokens_dataframe
+(tokenize_text, get_word_stem, add_stems_to_tokens_dataframe, get_qwerty_weighted_substitution_cost,
+ get_alignment_and_wagner_fischer_matrix, get_optimal_alignment_hirschberg, alignment_to_strings, get_edit_distance,
+ evaluate_alignment_edit_distance)
 
 msg_paths = list(dataset_dir.glob("*/*/*"))
 
