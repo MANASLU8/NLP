@@ -8,9 +8,14 @@
 * `assets` - вспомогательные и конфигурационные файлы, не являющиеся исходным кодом.
     * `raw-dataset` - **незакоммиченная директория**, куда следует поместить
       распакованный [исходный датасет](http://qwone.com/~jason/20Newsgroups/20news-bydate.tar.gz) для запуска проекта.
+    * `annotated-corpus` - незакоммиченная директория с токенизированным датасетом (ЛР №1).
+    * `annotated-corpus/tokens.tsv` - словарь токенов (ЛР №2).
+    * `corrupted-dataset` - незакоммиченная директория для ЛР №2, куда следует поместить повреждённый тестовый датасет.
+    * `misc` - прочие ассеты
+      * `qwerty_distances.json` - предрассчитанные расстояния между клавишами на клавиатуре QWERTY.
     * `requirements.txt` - файл с зависимостями.
 * `source` - исходный код.
-    * `task1` - результат выполнения лабораторной работы №1.
+    * `taskX` - результат выполнения лабораторной работы №X.
     * `tests` - модульные тесты.
 
 ## Настройка окружения
@@ -24,6 +29,8 @@
 cd projects/iburakov
 export PYTHONPATH=source  # or $env:PYTHONPATH="source" in PowerShell
 python -m task1 
+python source/task2/scripts/generate_dictionary.py
+python source/task2/scripts/evaluate_spell_correction.py
 ```
 
 ## Запуск тестов
