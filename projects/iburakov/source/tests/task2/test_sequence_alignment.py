@@ -1,7 +1,6 @@
 from faker import Faker
 from pytest import mark
 
-from task2.qwerty_weighting import get_qwerty_weighted_substitution_cost
 from task2.sequence_alignment import _get_last_alignment_matrix_column, \
     get_optimal_alignment_hirschberg, alignment_to_strings, get_alignment_and_wagner_fischer_matrix
 
@@ -53,7 +52,3 @@ def test_alignment_of_generic_items_works():
     dest = [2, 33, 4, 5]
     alignment = get_optimal_alignment_hirschberg(src, dest)
     assert alignment == [(1, "-"), (2, 2), (3, 33), (4, 4), ("-", 5)]
-
-
-
-
