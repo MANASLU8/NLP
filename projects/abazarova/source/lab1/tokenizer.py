@@ -49,7 +49,7 @@ def tokenize(file: str):
     regs.append((punct_regexp, "PUNCT"))
 
     # Шаг 1: делим строку на части - то, что внутри кавычек, получаем текст для анализа
-    file=re.sub(r'"+', '"', file)
+    file = re.sub(r'"+', '"', file)
     array_of_nodes = re.compile(node_sep).split(file)
     array_of_nodes[0] = array_of_nodes[0][1:]
     array_of_nodes[-1] = array_of_nodes[-1][:-1]
@@ -60,42 +60,10 @@ def tokenize(file: str):
     file_name = re.sub(r'[^A-Za-z0-9]+', "_", array_of_nodes[1])
     if file_name[-1] == "_":
         file_name = file_name[:-1]
-    if file_name[0] == "_":
+    if len(file_name) > 0 and file_name[0] == "_":
         file_name = file_name[1:]
     text = str(array_of_nodes[1] + ". " + array_of_nodes[2])
-    # print(text)
-    # Шаг 2: по шаблонам выделяем токены и записываем в список токенов
-    array_of_tokens = []
-    while len(text) > 0:
-        # print(text)
-        flag = False
-        for r in regs:
-            if not flag:
-                match = re.match(r[0], text)
-                if match is not None:
-                    # print(match.group(0), r[1])
-                    text = text[len(match.group(0)):]
-                    if match.group(0):
-                        array_of_tokens.append(match.group(0))
-                    flag = True
-        if not flag:
-            match = re.match(space_regexp, text)
-            if match is not None:
-                # print(match.group(0), "SPACE")
-                text = text[len(match.group(0)):]
-                flag = True
-        if not flag:
-            match = re.match(sep_regexp,text)
-            if match is not  None:
-                # print(match.group(0), "SEP")
-                text = text[len(match.group(0)):]
-                array_of_tokens.append(match.group(0))
-                array_of_tokens.append("\n")
-                flag = True
-        if not flag:
-            # print(text, "can't read\n\n\n")
-            text = text[1:]
-
+    array_of_tokens = tok_tok(text)
     # print(array_of_tokens)
     return array_of_tokens, file_class, file_name
 
@@ -133,3 +101,56 @@ def get_wordnet_pos(treebank_tag):
     # по умолчанию пусть будет существительное
     else:
         return wordnet.NOUN
+
+
+def tok_tok(text: str):
+    regs = []
+    regs.append((site_regexp, "SITE"))
+    regs.append((tag_regexp, "TAG"))
+    regs.append((date_regexp, "DATE"))
+    regs.append((money_regexp, "MONEY"))
+    regs.append((numer_regexp, "№"))
+    regs.append((words_w_num_regexp, "WORDNUM"))
+    regs.append((number_regexp, "NUM"))
+    regs.append((red_word_regexp, "REDUCT"))
+    regs.append((big_word_regexp, "BIG"))
+    regs.append((word_regexp, "WORD"))
+    regs.append((punct_regexp, "PUNCT"))
+
+    # Шаг 2: по шаблонам выделяем токены и записываем в список токенов
+    array_of_tokens = []
+    while len(text) > 0:
+        # print(text)
+        flag = False
+        for r in regs:
+            if not flag:
+                match = re.match(r[0], text)
+                if match is not None:
+                    # print(match.group(0), r[1])
+                    text = text[len(match.group(0)):]
+                    if match.group(0):
+                        array_of_tokens.append(match.group(0))
+                    flag = True
+        if not flag:
+            match = re.match(space_regexp, text)
+            if match is not None:
+                # print(match.group(0), "SPACE")
+                text = text[len(match.group(0)):]
+                flag = True
+        if not flag:
+            match = re.match(sep_regexp, text)
+            if match is not None:
+                # print(match.group(0), "SEP")
+                text = text[len(match.group(0)):]
+                array_of_tokens.append(match.group(0))
+                array_of_tokens.append("\n")
+                flag = True
+        if not flag:
+            # print(text, "can't read\n\n\n")
+            text = text[1:]
+    return array_of_tokens
+
+
+def sent_tok(text: str):
+    array_of_sents=text.split(sep=sep_regexp)
+    return array_of_sents

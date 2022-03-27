@@ -48,28 +48,3 @@ def create_dict(path, d):
         writer = csv.writer(csvfile)
         for x in d:
             writer.writerow([x])
-
-
-def write_typos(paths, clas, name, lst):
-    string = ''
-    for i in range(len(lst)):
-        if lst[i] != "\n":
-            string = string+lst[i]+" "
-    path = (paths.split(sep="."))[0]
-    new_path = Path(str(Path(Path.cwd()))[:-len("source")], "assets",
-                    "typo-fixed", path, clas, name + ".tsv")
-    path_to_main_folders = Path(str(Path(Path.cwd()))[:-len("source")],
-                                "assets", "typo-fixed", path)
-    path_to_class_folders = Path(str(Path(Path.cwd()))[:-len("source")],
-                                 "assets", "typo-fixed", path, clas)
-    path_typo_fixed = Path(str(Path(Path.cwd()))[:-len("source")],
-                           "assets", "typo-fixed")
-    if not os.path.exists(path_typo_fixed):
-        os.mkdir(path_typo_fixed)
-    if not os.path.exists(path_to_main_folders):
-        os.mkdir(path_to_main_folders)
-    if not os.path.exists(path_to_class_folders):
-        os.mkdir(path_to_class_folders)
-    with open(new_path, 'w+', newline="\n") as tsvfile:
-        writer = csv.writer(tsvfile, dialect='excel-tab')
-        writer.writerow([string])

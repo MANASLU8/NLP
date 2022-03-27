@@ -13,13 +13,13 @@ class TestLevenst(unittest.TestCase):
         self.assertEqual(1, distance('s', 't'))
         self.assertEqual(1, distance('w', 'l'))
 
-    def test_dist(self):
+    def test_levenst(self):
         self.assertEqual(0.5, lev_hirsch("worf", "word"))
         self.assertEqual(0.25, lev_hirsch("worD", "word"))
         self.assertEqual(0.75, lev_hirsch("word", "dord"))
         self.assertEqual(1, lev_hirsch("worfd", "word"))
-        self.assertEqual(1, lev_vag_fish("world", "word"))
-        self.assertEqual(5.0, lev_vag_fish("qwert", "cvbnm"))
+        self.assertEqual(1, lev_hirsch("world", "word"))
+        self.assertEqual(5.0, lev_hirsch("qwert", "cvbnm"))
         self.assertEqual(2, lev_hirsch("wod", "word"))
 
 
