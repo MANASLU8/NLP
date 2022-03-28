@@ -14,8 +14,8 @@ def read_from_file(paths):
     return files
 
 
-def write_to_file(paths, tok, tags):
-    print(paths)
+def write_tokens(paths, tok, tags):
+    # print(paths)
     path = (paths.split(sep="."))[0]
     for t in tok:
         new_path = Path(str(Path(Path.cwd()))[:-len("source")], "assets",
@@ -24,7 +24,7 @@ def write_to_file(paths, tok, tags):
                                     "assets", "annotated-corpus", path)
         path_to_class_folders = Path(str(Path(Path.cwd()))[:-len("source")],
                                      "assets", "annotated-corpus", path, t[0])
-        print(new_path)
+        # print(new_path)
         if not os.path.exists(path_to_main_folders):
             os.mkdir(path_to_main_folders)
         if not os.path.exists(path_to_class_folders):
@@ -39,3 +39,12 @@ def write_to_file(paths, tok, tags):
                         writer.writerow([t[2][i][0], t[3][i], t[4][i], t[2][i][1]])
                     else:
                         writer.writerow([t[2][i][0], t[3][i], t[4][i]])
+
+
+def create_dict(path, d):
+    new_path = Path(str(Path(Path.cwd()))[:-len("source")], "assets", "resources", path)
+    # print(new_path)
+    with open(new_path, 'w+', newline="\n") as csvfile:
+        writer = csv.writer(csvfile)
+        for x in d:
+            writer.writerow([x])

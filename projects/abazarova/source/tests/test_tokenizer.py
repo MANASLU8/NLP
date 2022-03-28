@@ -104,6 +104,9 @@ class TestTokenizer(unittest.TestCase):
         self.assertEqual("be", lemm("am", "VBP"))
         self.assertEqual("student", lemm("students", "NN"))
 
+    def sep_tok(self):
+        self.assertEqual(["a","b","c"], sent_tok("a.b?c!"))
+
 
 if __name__ == "__main__":
     unittest.main()
