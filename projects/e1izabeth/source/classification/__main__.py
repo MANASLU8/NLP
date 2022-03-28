@@ -45,11 +45,11 @@ def main():
     data_train_path = "../../assets/raw-dataset/train.csv"
     data_test_path = "../../assets/raw-dataset/test.csv"
 
-    emb_train_path = "../../assets/annotated-corpus/train-embeddings.tsv"
-    emb_test_path = "../../assets/annotated-corpus/test-embeddings.tsv"
+    emb_train_path = "../../assets/train-embeddings.tsv"
+    emb_test_path = "../../assets/test-embeddings.tsv"
 
-    if not os.path.exists("../../assets/svm-models-evaluation/"):
-        os.makedirs("../../assets/svm-models-evaluation/")
+    if not os.path.exists("../../assets/svm-eval/"):
+        os.makedirs("../../assets/svm-eval/")
 
     iterations_num_list = [1000, 5000, 10000, 25000, 50000, 75000]
     kernel_types = ["linear", "rbf", "sigmoid"]
