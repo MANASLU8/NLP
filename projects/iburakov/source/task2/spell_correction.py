@@ -1,10 +1,9 @@
-import pandas as pd
 from pandas import DataFrame
 
-from dirs import token_dictionary_filepath
 from task1.token_tag import TokenTag
 from task2.qwerty_weighting import get_qwerty_weighted_substitution_cost
 from task2.sequence_alignment import get_edit_distance
+from task3.token_dictionary import load_token_dictionary
 
 _DEBUG_PRINTING = False
 
@@ -13,17 +12,16 @@ _PREFIX_SIZE = _SUFFIX_SIZE = 2
 _TOKEN_CORRECTION_EDIT_DISTANCE_THRESHOLD = 1.9
 _TRUSTED_TOKENS_COUNT_THRESHOLD = 50
 
-_dictionary = pd.read_csv(token_dictionary_filepath, sep="\t", keep_default_na=False)
-_dictionary["prefix"] = _dictionary.token.str[:_PREFIX_SIZE]
-_dictionary["suffix"] = _dictionary.token.str[-_SUFFIX_SIZE:]
-_tokens_by_prefix = _dictionary.groupby("prefix").token.agg(set)
-_tokens_by_suffix = _dictionary.groupby("suffix").token.agg(set)
-_tokens_set = set(_dictionary.token)
-_counts_by_token = {e.token: e.counts for e in _dictionary.itertuples()}
+_dictionary = load_token_dictionary(filter_stopwords=False)
+_dictionary_df = _dictionary.df
+_dictionary_df["prefix"] = _dictionary_df.token.str[:_PREFIX_SIZE]
+_dictionary_df["suffix"] = _dictionary_df.token.str[-_SUFFIX_SIZE:]
+_tokens_by_prefix = _dictionary_df.groupby("prefix").token.agg(set)
+_tokens_by_suffix = _dictionary_df.groupby("suffix").token.agg(set)
 
 
 def _get_token_correction(token: str):
-    if token in _tokens_set and _counts_by_token[token] > _TRUSTED_TOKENS_COUNT_THRESHOLD:
+    if token in _dictionary.tokens and _dictionary.counts_by_token[token] > _TRUSTED_TOKENS_COUNT_THRESHOLD:
         # optimize correcting known trusted tokens from dictionary
         return token
 
@@ -41,7 +39,7 @@ def _get_token_correction(token: str):
         ed = get_edit_distance(candidate, token, substitution_cost_evaluator=get_qwerty_weighted_substitution_cost)
         if ed > _TOKEN_CORRECTION_EDIT_DISTANCE_THRESHOLD:
             continue
-        score = (ed, -_counts_by_token[candidate])
+        score = (ed, -_dictionary.counts_by_token[candidate])
         if min_score is None or score < min_score:
             min_score = score
             min_distance_candidate = candidate
