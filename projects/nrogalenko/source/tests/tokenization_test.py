@@ -1,11 +1,11 @@
 import unittest
-from source.text_annotation.tokenizer import tokenize_news_text
+from source.text_annotation.tokenizer import tokenize
 from source.text_annotation.token_info import TokenInfo
 
 
 class TestTokenization(unittest.TestCase):
     def test_tokenization(self):
-        self.assertEqual(tokenize_news_text("Let's check this 1 sentence, 60km test.com 'a' b."),
+        self.assertEqual(tokenize("Let's check this 1 sentence, 60km test.com 'a' b."),
                          [TokenInfo("Let's", "Let", "Let's", "n", "word"),
                           TokenInfo(" ", " ", " ", "n", "whitespace"),
                           TokenInfo("check", "check", "check", "v", "word"),

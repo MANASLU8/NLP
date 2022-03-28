@@ -1,5 +1,5 @@
 import os
-from .tokenizer import tokenize
+from .tokenizer import tokenize_news_text
 
 
 def process_file(path, output_dir_name):
@@ -8,7 +8,7 @@ def process_file(path, output_dir_name):
         line = f.readline()
         while line:
             try:
-                tokens_list = tokenize(line)
+                tokens_list = tokenize_news_text(line)
                 label = line.split('","')[0][1:]
                 output_dir_path = "../assets/" + output_dir_name + "/" + label + "/"
                 if not os.path.exists(output_dir_path):
