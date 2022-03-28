@@ -2,18 +2,35 @@ import pandas as pd
 
 import numpy as np
 from gensim.models import Word2Vec
+from scipy import sparse
+from scipy.sparse import csr_matrix
 
 from tokenizer.tokenizer import tokenize_text
 from utils import eng_stopwords, calc_tf_idf
 
 
 class TextVectorizer:
-    def __init__(self, token_entries):
+    def __init__(self, token_entries, old_vectorizer=None):
         self.token_entries = token_entries
-        self.all_words = []
         self.all_words_total_val = sum(sum(e.values()) for e in token_entries.values())
-        for word, _ in token_entries.items():
-            self.all_words.append(word)
+        if old_vectorizer is None:
+            self.all_words = []
+            self.index_by_word = dict()
+            for word, _ in token_entries.items():
+                self.index_by_word[word] = len(self.all_words)
+                self.all_words.append(word)
+        else:
+            self.all_words = old_vectorizer.all_words
+            self.index_by_word = old_vectorizer.index_by_word
+        self.words_by_file = dict()
+        for word, entry in self.token_entries.items():
+            for fname, n in entry.items():
+                words = self.words_by_file.get(fname)
+                if words is None:
+                    self.words_by_file[fname] = words = dict()
+                words[word] = n
+        self.fnames = list(self.words_by_file.keys())
+        self.fnames.sort()
 
     def get_tf_idf_for_text(self, text):
         tokens_list = [token_info[2] for token_info in tokenize_text(text)
@@ -95,3 +112,19 @@ class TextVectorizer:
                 print(n * 100 / data_count, '%', ' (', n , '/', data_count , ')')
                 f_out.flush()
         f_out.close()
+
+    def get_csr_matrix(self, min_fr):
+        indptr = [0]
+        indices = []
+        data = []
+        for file in range(0, len(self.fnames)):
+            for word, n in self.words_by_file.get(self.fnames[file]).items():
+                if n >= min_fr:
+                    wi = self.index_by_word.get(word)
+                    indices.append(wi)
+                    data.append(1)
+            indptr.append(len(indices))
+        return csr_matrix((data, indices, indptr), dtype=int, shape=(len(self.fnames), len(self.all_words)))
+
+    def save_matrix(self, min_frequency, matrix_path):
+        sparse.save_npz(matrix_path, self.get_csr_matrix(min_frequency))

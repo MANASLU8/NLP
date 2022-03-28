@@ -1,6 +1,6 @@
 from utils import create_plot, pca_reduce, cosine_distance
 from vectorizer import TextVectorizer
-from freq_dictionary import write_tokens_freq_dictionary, read_freq_dict, construct_entry_info
+from freq_dictionary import read_freq_dict
 from w2v import apply_w2v_model, w2v_train
 
 
@@ -35,15 +35,15 @@ def demonstrate_w2v_and_tfidf_models(model_path, tokens_entry, vec_dimension):
 
 def main():
     vec_dict_file_path = "../assets/vec_dict"
-    tokens_entry = dict()
-    construct_entry_info(tokens_entry)
-    write_tokens_freq_dictionary(tokens_entry, vec_dict_file_path, 2)
+    #tokens_entry = dict()
+    #construct_entry_info(tokens_entry)
+    #write_tokens_freq_dictionary(tokens_entry, vec_dict_file_path)
     tokens_entries = read_freq_dict(vec_dict_file_path)
     model_path = '../assets/w2v-train-model_5_100_5.bin'
-    w2v_train('../assets/raw-dataset/train.csv', 10, 100, 5, model_path)
-    demonstrate_w2v_and_tfidf_models(model_path, tokens_entries, 2)
+    w2v_train('../assets/raw-dataset/train.csv', 10, 5, 100, model_path)
+    #demonstrate_w2v_and_tfidf_models(model_path, tokens_entries, 2)
     vectorizer = TextVectorizer(tokens_entries)
-    vectorizer.get_w2v_embeddings(model_path, "../assets/raw-dataset/test.csv", "../assets/annotated-corpus/test-embeddings.tsv")
+    vectorizer.get_w2v_embeddings(model_path, "../assets/raw-dataset/train.csv", "../assets/annotated-corpus/train-embeddings.tsv")
     #print(tokens_entries)
 
 
