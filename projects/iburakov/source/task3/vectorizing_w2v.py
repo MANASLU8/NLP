@@ -4,7 +4,7 @@ import numpy as np
 from gensim.models import Word2Vec
 from pandas import DataFrame
 
-from dirs import word2vec_model_filepath
+from paths import word2vec_model_filepath
 from task1.token_tag import TokenTag
 from task1.tokenizer import tokenize_text
 from task3.scripts.train_word2vec import W2V_VECTOR_SIZE

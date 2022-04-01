@@ -7,7 +7,7 @@ import pandas as pd
 from scipy import sparse
 from sklearn.decomposition import LatentDirichletAllocation
 
-from dirs import lda_experiments_dir, test_term_document_matrix_filepath, annotated_corpus_dir
+from paths import lda_experiments_dir, test_term_document_matrix_filepath, annotated_corpus_dir
 from task3.term_document_matrix import load_term_document_matrix, get_term_document_matrix_docs
 from task3.token_dictionary import load_token_dictionary
 

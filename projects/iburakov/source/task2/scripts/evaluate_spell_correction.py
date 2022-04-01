@@ -4,8 +4,8 @@ from random import shuffle
 from joblib.externals.loky import ProcessPoolExecutor
 from pandas import DataFrame
 
-from dirs import corrupted_dataset_dir, annotated_corpus_dir
 from misc import configure_dataframes_printing
+from paths import corrupted_dataset_dir, annotated_corpus_dir
 from task1.newsgroup_message import read_newsgroup_message
 from task1.tokenizer import tokenize_text
 from task1.utils import read_tokens_from_annotated_corpus_tsv

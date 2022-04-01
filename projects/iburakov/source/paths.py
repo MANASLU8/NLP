@@ -1,7 +1,5 @@
 from pathlib import Path
 
-# TODO: rename to "paths"
-
 assets_dir = Path() / "assets"
 dataset_dir = assets_dir / "raw-dataset"
 annotated_corpus_dir = assets_dir / "annotated-corpus"
