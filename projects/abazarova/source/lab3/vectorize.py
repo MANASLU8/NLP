@@ -40,7 +40,7 @@ def score_tf_idf(tfidf):
     score = {}
     for x in tfidf:
         for word_score in x:
-            #print(word_score)
+            # print(word_score)
             if word_score[0] not in score:
                 score[word_score[0]] = word_score[1]
             else:
