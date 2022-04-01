@@ -42,15 +42,15 @@ patterns = {
 }
 
 
-def tokenize(line):
+def tokenize_news_text(line):
     text_parts = line.split('","')
-    news_header_tokens = tokenize_news_text(text_parts[1] + ".")
-    news_text_tokens = tokenize_news_text(text_parts[2][:-2])
+    news_header_tokens = tokenize(text_parts[1] + ".")
+    news_text_tokens = tokenize(text_parts[2][:-2])
     tokens = news_header_tokens + news_text_tokens
     return tokens
 
 
-def tokenize_news_text(text):
+def tokenize(text):
     tokens_list = []
     text_to_tokenize = text
     while len(text_to_tokenize) > 0:

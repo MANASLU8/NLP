@@ -1,7 +1,7 @@
 import glob
-from source.text_annotation.tokenizer import tokenize
+from source.text_annotation.tokenizer import tokenize_news_text
 from .tokens_dictionary_creator import get_words_dictionary_list
-from .file_utils import get_tokens_list_from_document_annotation
+from source.util.file_utils import get_tokens_list_from_document_annotation
 from .typos_correction_module import fix_typo_with_dictionary
 
 
@@ -23,7 +23,7 @@ def process_corrupted_file(path, annotation_documents_dir_path):
                 document_annotation_file_path = str(glob.glob(annotation_documents_dir_path + "/**/" + str(lines_counter) + ".tsv", recursive=True)[0])
                 tokens_from_document_annotation = get_tokens_list_from_document_annotation(document_annotation_file_path)
                 tokens_count_in_document_annotation = len(tokens_from_document_annotation)
-                tokens_list = tokenize(line)
+                tokens_list = tokenize_news_text(line)
                 tokens_list = [token for token in tokens_list if token.token_tag != "whitespace"]
                 print(lines_counter)
                 # print(tokens_from_document_annotation)

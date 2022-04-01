@@ -5,7 +5,7 @@ from multiprocessing import Pool
 
 import pandas as pd
 
-from mytokenizer.tokenizer import tokenize_text
+from tokenizer.tokenizer import tokenize_text
 from typos.__main__ import DICT_NAME
 
 qwerty = ["qwertyuiop", "asdfghjkl", "zxcvbnm"]
@@ -48,6 +48,8 @@ class TreeDictNode:
     def __init__(self):
         self.childs = dict()
         self.end = False
+        self.count = 0
+        self.docs = set()
 
 
 class Ctx:
@@ -107,7 +109,7 @@ class TreeDict:
     def __init__(self):
         self.root = TreeDictNode()
 
-    def add(self, str):
+    def add(self, str, doc):
         node = self.root
         for c in str:
             next = node.childs.get(c)
@@ -116,6 +118,8 @@ class TreeDict:
                 node.childs[c] = next
             node = next
         node.end = True
+        node.count = node.count + 1
+        node.docs.add(doc)
 
     def save(self, fname):
         f = open(fname, 'w')

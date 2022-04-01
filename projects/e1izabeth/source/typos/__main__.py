@@ -5,7 +5,7 @@ from pathlib import Path
 import pandas as pd
 import regex
 
-from mytokenizer.tokenizer import tokenize_text
+from tokenizer.tokenizer import tokenize_text
 
 classes = dict([
     (1, 'World'),
@@ -16,8 +16,9 @@ classes = dict([
 
 DICT_NAME = 'dictionary'
 
+
 def create_dictionary(dirnames_annotated):
-    with open('../assets/DICT_NAME', "w") as dictionary_file:
+    with open('../assets/' + DICT_NAME, "w") as dictionary_file:
         for dir in dirnames_annotated:
             print('processing ', dir)
             ff = listdir(dir)
@@ -30,7 +31,7 @@ def create_dictionary(dirnames_annotated):
                 try:
                     df = pd.read_csv(filename, delimiter="\t", header=None, usecols=[0], engine='python',
                                      error_bad_lines=False)
-                    for item in df.iloc[:, 0].tolist():
+                    for item in df.iloc[:, 1].tolist():
                         dictionary_file.write(str(item).strip())
                         dictionary_file.write('\n')
                 except Exception as e:
