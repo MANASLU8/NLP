@@ -35,12 +35,7 @@ def tokenize_random():
     return tokenize_text(msg.body)
 
 
-# print(vectorize_text_w2v(read_newsgroup_message(choice(msg_paths)).body))
-
-
 dct = load_token_dictionary()
-# with open("ldatest.pickle", "rb") as f:
-#     lda = pickle.load(f)
 
 ttdm = load_term_document_matrix(test_term_document_matrix_filepath)
 
