@@ -7,7 +7,7 @@ class TestTokenization(unittest.TestCase):
     def test_on_empty_string(self):
         self.assertEqual(len(tokenize_text("")), 0)
 
-    def test_on_toekens_count(self):
+    def test_on_tokens_count(self):
         self.assertEqual(len(tokenize_text("Hello, World!")), 5)
 
     def test(self):
@@ -22,6 +22,7 @@ class TestTokenization(unittest.TestCase):
             [17, 'whitespace', ' '],
             [18,'word','day'],
             [21,'punct','!']])
+
 
 if __name__ == "__main__":
     unittest.main()
