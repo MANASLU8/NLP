@@ -22,7 +22,8 @@ def process(path, dir_name):
                 f_out.truncate(0)
                 for annotation in annotations:
                     if annotation.token_type != "whitespace":
-                        f_out.write(f"{annotation.token}\t{annotation.stem}\t{annotation.lemma}\n")
+                        f_out.write(
+                            f"{annotation.token}\t{annotation.stem}\t{annotation.lemma}\t{annotation.token_type}\n")
                     if annotation.token in ['.', '!', '?', '...']:
                         f_out.write('\n')
                 f_out.close()
@@ -37,5 +38,6 @@ def process(path, dir_name):
 def annotate_news_text(line):
     splitted = line.split('","')
     headers = annotate_text(f"{splitted[1]}.")
-    news = annotate_text(f"{splitted[1]}. {splitted[2][:-2]}")
+    # news = annotate_text(f"{splitted[1]}. {splitted[2][:-2]}")
+    news = annotate_text(f"{splitted[2][:-2]}")
     return headers + news
