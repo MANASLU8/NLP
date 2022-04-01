@@ -1,18 +1,20 @@
 import json
 
+import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
 from numpy.polynomial import Polynomial
 from pandas import DataFrame
 from sklearn.metrics import r2_score
 
+from misc import configure_dataframes_printing
 from paths import lda_experiments_dir
 
 
 def _plot_perplexity_1d(meta_df: DataFrame):
     iterations_space = sorted(meta_df.n_iterations.unique())
     plt.Figure()
-    fig, axs = plt.subplots(len(iterations_space), 1, sharex=True, sharey=True, figsize=(5, 3 * len(iterations_space)))
+    fig, axs = plt.subplots(len(iterations_space), 1, sharex=True, figsize=(5, 3 * len(iterations_space)))
     for ax, n_iterations in zip(axs, iterations_space):
         ax: plt.Axes
 
@@ -26,7 +28,7 @@ def _plot_perplexity_1d(meta_df: DataFrame):
 
         polys = pd.DataFrame(columns=["poly", "r2"])
         polys.r2 = polys.r2.astype(float)
-        for poly_deg in range(1, 6):
+        for poly_deg in range(1, 5):
             # noinspection PyTypeChecker
             poly: Polynomial = Polynomial.fit(x, y, poly_deg)
             # noinspection PyCallingNonCallable
@@ -36,24 +38,26 @@ def _plot_perplexity_1d(meta_df: DataFrame):
             ]
         polys = polys.reset_index().rename({"index": "deg"}, axis=1)
 
-        ax.plot(df10.index, df10.values, "--", alpha=0.6, label="perplexity")
+        ax.plot(df10.index, np.log(df10.values), "--", alpha=0.6, label="perplexity")
         best_poly = polys.iloc[polys.r2.argmax()]
+        x, y = best_poly.poly.linspace()
         ax.plot(
-            *best_poly.poly.linspace(),
+            x, np.log(y),
             label=f"poly{best_poly.deg}, r2={best_poly.r2:.2f}"
         )
 
         ax.set_title(f"n_iterations={n_iterations}")
         ax.set_xlabel("n_topics")
+        ax.set_yscale("log")
         ax.legend()
 
-    plt.subplots_adjust(hspace=0.3)
+    plt.subplots_adjust(left=0.3, hspace=0.3)
     plt.show()
 
 
 def _plot_perplexity_2d(meta_df: DataFrame):
     df = meta_df.pivot(index="n_iterations", columns="n_topics", values="test_perplexity")
-    plt.imshow(-df.values, cmap="coolwarm")
+    plt.imshow(np.log(df.values), cmap="coolwarm")
     plt.colorbar()
     plt.xticks(range(len(df.columns)), df.columns)
     plt.xlabel("n_topics")
@@ -63,6 +67,7 @@ def _plot_perplexity_2d(meta_df: DataFrame):
 
 
 if __name__ == '__main__':
+    configure_dataframes_printing()
     experiment_dirs = list(lda_experiments_dir.glob("*"))
 
     metas = []
