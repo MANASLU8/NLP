@@ -12,8 +12,14 @@ from task3.token_dictionary import load_token_dictionary
 _dct = load_token_dictionary()
 
 
+def get_term_document_matrix_docs(source_dir: Path):
+    paths = list(source_dir.glob("*/*"))
+    names = [f"{path.parent.name}.{path.name[:-4]}" for path in paths]
+    return paths, names
+
+
 def generate_term_document_matrix(target_filepath: Path, source_dir: Path):
-    files = list(source_dir.glob("*/*"))
+    files, _ = get_term_document_matrix_docs(source_dir)
     print(f"Files found: {len(files)}")
 
     row_ind_lists = []
@@ -38,5 +44,5 @@ def generate_term_document_matrix(target_filepath: Path, source_dir: Path):
     sparse.save_npz(target_filepath, s, compressed=True)
 
 
-def load_term_document_matrix():
-    return load_npz(term_document_matrix_filepath)
+def load_term_document_matrix(path=term_document_matrix_filepath) -> sparse.coo_matrix:
+    return load_npz(path)

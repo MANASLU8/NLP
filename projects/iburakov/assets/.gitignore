@@ -2,3 +2,4 @@ raw-dataset
 annotated-corpus
 corrupted-dataset
 misc/word2vec.model
+lda_experiments

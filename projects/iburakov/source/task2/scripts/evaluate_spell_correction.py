@@ -1,11 +1,11 @@
 from pathlib import Path
 from random import shuffle
 
-import pandas as pd
 from joblib.externals.loky import ProcessPoolExecutor
 from pandas import DataFrame
 
 from dirs import corrupted_dataset_dir, annotated_corpus_dir
+from misc import configure_dataframes_printing
 from task1.newsgroup_message import read_newsgroup_message
 from task1.tokenizer import tokenize_text
 from task1.utils import read_tokens_from_annotated_corpus_tsv
@@ -58,9 +58,7 @@ def _batcher(x, bs):
 
 
 if __name__ == '__main__':
-    pd.set_option('display.max_rows', 1000)
-    pd.set_option('display.max_columns', 5)
-    pd.set_option('expand_frame_repr', False)
+    configure_dataframes_printing()
 
     files = list(corrupted_dataset_dir.glob("*/*"))
     shuffle(files)
