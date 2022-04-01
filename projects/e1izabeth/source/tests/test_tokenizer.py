@@ -1,6 +1,6 @@
 import unittest
 
-from mytokenizer.tokenizer import tokenize_text
+from tokenizer.tokenizer import tokenize_text
 
 
 class TestTokenization(unittest.TestCase):

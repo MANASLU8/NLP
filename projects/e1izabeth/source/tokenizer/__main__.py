@@ -1,4 +1,4 @@
-from mytokenizer.tokenizer import process_file
+from tokenizer.tokenizer import process_file
 
 
 def main():

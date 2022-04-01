@@ -1,7 +1,8 @@
 import click
 
-from projects.abazarova.source.lab1.tokenizer import *
-from projects.abazarova.source.lab1.reader import *
+from lab1.lab1 import *
+from lab2.lab2 import *
+from lab3.lab3 import *
 
 
 @click.group()
@@ -13,49 +14,31 @@ def main():
 @click.argument("paths", type=str)
 @click.argument("pos_tags", type=bool, required=False)
 def token(paths, pos_tags=False):
-    files = read_from_file(paths)
-    # print(files)
-    tokens = []
-    for file in files:
-        rez = tokenize(file[0])
-        # file_class, file_name, array_of_tokens
-        tokens.append([rez[1], rez[2], rez[0]])
-    # print(tokens)
-    print("TOKENS FINISHED")
-    # Для корректной работы лемматайзера, нужно получить POS-теги
-    for tok in tokens:
-        tok[2] = pos(tok[2])
-    print("POS FINISHED")
-    # Получаем стеммы - используем токены, которые получили перед этим
-    for tok in tokens:
-        stem = []
-        for i in range(len(tok[2])):
-            stem.append(stemm(tok[2][i][0]))
-        tok.append(stem)
-    print("STEMS FINISHED")
-    # Получаем леммы - тут надо использовать теги, которые мы до этого получили
-    for tok in tokens:
-        lem = []
-        for i in range(len(tok[2])):
-            lem.append(lemm(tok[2][i][0], tok[2][i][1]))
-        tok.append(lem)
-    print("LEMS FINISHED")
-    # for tok in tokens:
-    # print("**********")
-    #   for i in range(len(tok[2])):
-    #       print(tok[2][i][0], tok[3][i], tok[4][i])
-
-    # print(*tokens, sep="\n")
-
-    write_to_file(paths, tokens, pos_tags)
+    lab1(paths, pos_tags)
 
 
 @main.command()
-@click.argument("paths", type=str)
-@click.argument("hirsh", type=bool, required=False)
-def typo(paths, pos_tags=True):
-    pass
+@click.argument("path_t", type=str)
+@click.argument("path_d", type=str)
+@click.argument("path_c", type=str)
+@click.argument("percent", type=int)
+@click.argument("algo", type=str, required=False)
+def typo(path_t, path_d, path_c, percent, algo):
+    lab2(path_t, path_d, path_c, percent, algo)
+
+
+@main.command()
+@click.argument("train_path", type=str)
+@click.argument("test_path", type=str)
+@click.argument("vec_path", type=str)
+@click.argument("word_count", type=int)
+def vector(train_path, test_path, vec_path, word_count=1):
+    fdict_file = Path(str(Path(Path.cwd()))[:-len("source")], "assets", "fdict.tsv")
+    tdm_file = Path(str(Path(Path.cwd()))[:-len("source")], "assets", "tdm.tsv")
+    vec = Path(str(Path(Path.cwd()))[:-len("source")], "assets", vec_path)
+    lab3(train_path, test_path, vec, word_count, fdict_file, tdm_file)
 
 
 if __name__ == "__main__":
     main()
+
