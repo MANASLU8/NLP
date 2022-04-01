@@ -9,7 +9,7 @@ from nltk.corpus import wordnet
 stemmer = SnowballStemmer("english")
 lemmatizer = WordNetLemmatizer()
 
-end_of_clause = ['.', '?', '!']
+end_of_clause = ['.', '?', '!', '...']
 
 
 def get_wordnet_pos(word):
@@ -155,7 +155,7 @@ def process_file(fname):
                 prev = [0, '', '']
                 for w in tokens:
                     if w[1] != 'whitespace':
-                        f.write(w[2] + '\t' + stemmer.stem(w[2]) + "\t" + lemmatizer.lemmatize(w[2], get_wordnet_pos(w[2])) + '\n')
+                        f.write(w[1] + '\t' + w[2] + '\t' + stemmer.stem(w[2]) + "\t" + lemmatizer.lemmatize(w[2], get_wordnet_pos(w[2])) + '\n')
                     elif prev[2] in end_of_clause:
                         f.write('\n')
                     prev = w
@@ -168,3 +168,13 @@ def process_file(fname):
         n = n + 1
         if n % 1000 == 0:
             print(int(n * 100 / data_count), '%')
+
+def main():
+    fname_train = '../assets/raw-dataset/train.csv'
+    fname_test = '../assets/raw-dataset/test.csv'
+    process_file(fname_train)
+    process_file(fname_test)
+
+
+if __name__ == "__main__":
+    main()
