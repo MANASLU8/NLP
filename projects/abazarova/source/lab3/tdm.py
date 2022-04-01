@@ -1,4 +1,4 @@
-def tdm(tdm_file, dictionary,doc_count):
+def tdm(tdm_file, dictionary, doc_count):
     # building and writing to file term document matrix
     ftdm = open(tdm_file, "w")
     header_string = ""

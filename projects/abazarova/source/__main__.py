@@ -3,6 +3,7 @@ import click
 from lab1.lab1 import *
 from lab2.lab2 import *
 from lab3.lab3 import *
+from lab4.lab4 import *
 
 
 @click.group()
@@ -37,6 +38,23 @@ def vector(train_path, test_path, vec_path, word_count=1):
     tdm_file = Path(str(Path(Path.cwd()))[:-len("source")], "assets", "tdm.tsv")
     vec = Path(str(Path(Path.cwd()))[:-len("source")], "assets", vec_path)
     lab3(train_path, test_path, vec, word_count, fdict_file, tdm_file)
+
+
+@main.command()
+@click.argument("train_path", type=str)
+@click.argument("test_path", type=str)
+@click.argument("rez", type=str)
+def themes(train_path, test_path, rez):
+    fdict_path = Path(str(Path(Path.cwd()))[:-len("source")], "assets", "fdict.tsv")
+    csr_path = Path(str(Path(Path.cwd()))[:-len("source")], "assets", "lda", "csr_matrix.npz")
+    topdoc_path = Path(str(Path(Path.cwd()))[:-len("source")], "assets", "lda", "test_topdoc.npz")
+    lab4(train_path, csr_path, rez, fdict_path, test_path, topdoc_path)
+
+
+@main.command()
+@click.argument("paths", type=str)
+def classif(paths):
+    pass
 
 
 if __name__ == "__main__":
