@@ -1,2 +1,5 @@
 /.idea
-/assets/
+/assets/train/
+/assets/test/
+/assets/test.csv
+/assets/topic-modeling
