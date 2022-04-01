@@ -1,6 +1,5 @@
 import json
 import logging
-import pickle
 from pathlib import Path
 from shutil import rmtree
 
@@ -52,9 +51,10 @@ def _generate_experiment_data_dir(lda: LatentDirichletAllocation, n_top_words=30
         rmtree(target_dir)
     target_dir.mkdir(parents=True)
 
-    logging.info(f"Dumping model")
-    with (target_dir / "model.pickle").open("wb") as f:
-        pickle.dump(lda, f)
+    # commented since not needed + weights a lot
+    # logging.info(f"Dumping model")
+    # with (target_dir / "model.pickle").open("wb") as f:
+    #     pickle.dump(lda, f)
 
     logging.info(f"Generating {n_top_words} top words per topic matrix")
     pd.DataFrame({
