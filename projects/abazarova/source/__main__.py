@@ -4,6 +4,7 @@ from lab1.lab1 import *
 from lab2.lab2 import *
 from lab3.lab3 import *
 from lab4.lab4 import *
+from lab5.lab5 import *
 
 
 @click.group()
@@ -52,9 +53,16 @@ def themes(train_path, test_path, rez):
 
 
 @main.command()
-@click.argument("paths", type=str)
-def classif(paths):
-    pass
+@click.argument("train", type=str)
+@click.argument("train_vector", type=str)
+@click.argument("test", type=str)
+@click.argument("test_vector", type=str)
+def classif(train, train_vector, test, test_vector):
+    train_path = Path(str(Path(Path.cwd()))[:-len("source")], "assets", "resources", train)
+    train_vector_path = Path(str(Path(Path.cwd()))[:-len("source")], "assets", train_vector)
+    test_path = Path(str(Path(Path.cwd()))[:-len("source")], "assets", "resources", test)
+    test_vector_path = Path(str(Path(Path.cwd()))[:-len("source")], "assets", test_vector)
+    lab5(train_path, train_vector_path, test_path, test_vector_path)
 
 
 if __name__ == "__main__":
