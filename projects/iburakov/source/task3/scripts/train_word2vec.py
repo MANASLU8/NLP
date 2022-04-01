@@ -4,11 +4,12 @@ from random import shuffle
 from gensim.models import Word2Vec
 
 from dirs import annotated_corpus_dir, word2vec_model_filepath
+from misc import configure_logging
 from task1.token_tag import TokenTag
 from task1.utils import read_tokens_from_annotated_corpus_tsv
 from task3.token_dictionary import load_token_dictionary
 
-logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
+configure_logging()
 
 _dct = load_token_dictionary()
 W2V_VECTOR_SIZE = 100
