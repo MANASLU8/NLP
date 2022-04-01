@@ -6,7 +6,7 @@ from numpy.polynomial import Polynomial
 from pandas import DataFrame
 from sklearn.metrics import r2_score
 
-from dirs import lda_experiments_dir
+from paths import lda_experiments_dir
 
 
 def _plot_perplexity_1d(meta_df: DataFrame):

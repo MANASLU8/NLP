@@ -1,7 +1,7 @@
 from random import choice
 
-from dirs import dataset_dir, test_term_document_matrix_filepath
 from misc import configure_dataframes_printing, configure_logging
+from paths import dataset_dir, test_term_document_matrix_filepath
 from task1.newsgroup_message import read_newsgroup_message
 from task1.stemmer import get_word_stem, add_stems_to_tokens_dataframe
 from task1.tokenizer import tokenize_text

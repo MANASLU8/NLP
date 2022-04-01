@@ -1,7 +1,7 @@
 from random import shuffle
 from time import perf_counter
 
-from dirs import dataset_dir, annotated_corpus_dir
+from paths import dataset_dir, annotated_corpus_dir
 from task1.lemmatizer import add_lemmas_to_tokens_dataframe
 from task1.newsgroup_message import read_newsgroup_message
 from task1.stemmer import add_stems_to_tokens_dataframe

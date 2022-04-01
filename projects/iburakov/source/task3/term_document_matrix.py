@@ -4,7 +4,7 @@ from pathlib import Path
 from scipy import sparse
 from scipy.sparse import load_npz
 
-from dirs import term_document_matrix_filepath
+from paths import term_document_matrix_filepath
 from task1.utils import read_tokens_from_annotated_corpus_tsv
 from task2.spell_correction import CORRECTABLE_TOKEN_TAGS
 from task3.token_dictionary import load_token_dictionary

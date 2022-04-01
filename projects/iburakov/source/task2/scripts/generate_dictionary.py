@@ -3,7 +3,7 @@ from collections import Counter
 import pandas as pd
 from pandas import DataFrame
 
-from dirs import annotated_corpus_dir, token_dictionary_filepath
+from paths import annotated_corpus_dir, token_dictionary_filepath
 from task1.utils import read_tokens_from_annotated_corpus_tsv
 from task2.spell_correction import CORRECTABLE_TOKEN_TAGS
 
