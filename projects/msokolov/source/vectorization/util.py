@@ -28,31 +28,21 @@ def read_directory(path: str):
     return result
 
 
-def read_token_file(path: str):
-    tokens = []
-    with open(path) as file:
-        reader = csv.reader(file, delimiter='\t')
-        for record in reader:
-            if not record:
-                continue
+def read_corpus(dir_path: str):
+    paths = read_directory(dir_path)
 
-            token = record[0].lower()
-            if token in forbidden_words:
-                continue
-
-            tokens.append(token)
-
-    return tokens
-
-
-def read_token_files(file_paths: [str]):
-    freq_dict = {}
     corpus = []
-    for file_path in file_paths:
-        doc = read_token_file(file_path)
-        for token in doc:
-            freq_dict[token] = freq_dict.get(token, 0) + 1  # If not in dict insert 1
+    for path in paths:
+        with open(path) as file:
+            words = []
+            reader = csv.reader(file, delimiter='\t')
+            for record in reader:
+                if not record:
+                    continue
 
-        corpus.append(doc)
+                _, lemma, = record
+                word = lemma.lower()
+                words.append(word)
+            corpus.append(words)
 
-    return corpus, freq_dict
+    return corpus

@@ -1,4 +1,3 @@
-import sys
 import numpy as np
 import csv
 import matplotlib.colors
@@ -6,23 +5,13 @@ import matplotlib.colors
 import matplotlib.pyplot as plt
 
 from source.vectorization import TDMatrix, Vocab
+from source.vectorization.util import read_corpus
 
 from sklearn.decomposition import LatentDirichletAllocation as LDA
 from sklearn.metrics import r2_score
 
-from source.vectorization.util import read_directory
 
 OUT_PATH = "../../assets/topic-modeling"
-
-
-def read_freq_dict(path: str):
-    freq_dict = {}
-    with open(path) as file:
-        reader = csv.reader(file)
-        for [token, freq] in reader:
-            freq_dict[token] = freq
-
-    return freq_dict
 
 
 def get_top_topics_words(model: LDA, words: [str]):
@@ -48,26 +37,6 @@ def write_doc_topic_distr(doc_topic_distr: np.array, iter: int, topic: int):
     with open(f"{OUT_PATH}/doc-topic-distr-{iter}-{topic}.tsv", 'w', newline='') as file:
         writer = csv.writer(file, delimiter='\t')
         writer.writerows(doc_topic_distr)
-
-
-def read_corpus(dir_path: str):
-    paths = read_directory(dir_path)
-
-    corpus = []
-    for path in paths:
-        with open(path) as file:
-            words = []
-            reader = csv.reader(file, delimiter='\t')
-            for record in reader:
-                if not record:
-                    continue
-
-                _, _, stemma = record
-                word = stemma.lower()
-                words.append(word)
-            corpus.append(words)
-
-    return corpus
 
 
 def read_test_td_matrix(vocab: Vocab):
@@ -118,7 +87,7 @@ def create_plot():
     plt.show()
 
 
-def main(path: str):
+def main():
     train_td_matrix = TDMatrix.load("../../assets/annotated-corpus/td-train-data")
     test_td_matrix = TDMatrix.load("../../assets/annotated-corpus/td-test-data")
 
@@ -149,5 +118,4 @@ def main(path: str):
 
 
 if __name__ == "__main__":
-    # main(sys.argv[1])
-    create_plot()
+    main()

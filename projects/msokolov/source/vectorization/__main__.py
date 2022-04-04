@@ -1,4 +1,5 @@
 import csv
+import sys
 
 import nltk
 import numpy as np
@@ -7,7 +8,6 @@ import gensim
 from source.tokenizer.patterns import *
 from source.tokenizer import Tokenizer, Token
 from source.vectorization import TDMatrix, TextVectorizer
-from source.vectorization.util import read_directory
 
 from sklearn.decomposition import PCA
 
@@ -69,9 +69,8 @@ def vectorize_sentences(sentences, model, lemmatizer):
     return np.mean(sentences_vectors, axis=0)
 
 
-def vectorize_test_set(model):
-    with open("../../assets/annotated-corpus/test-embeddings.tsv", 'w', newline='') as out_file, \
-            open("../../assets/test.csv") as in_file:
+def vectorize_test_set(path: str, model):
+    with open("../../assets/annotated-corpus/test-embeddings.tsv", 'w', newline='') as out_file, open(path) as in_file:
         writer = csv.writer(out_file, delimiter='\t')
         reader = csv.reader(in_file)
 
@@ -97,27 +96,7 @@ def cosine_distance(x, y):
     return np.dot(x, y) / (np.linalg.norm(x) * np.linalg.norm(y))
 
 
-def read_corpus(dir_path: str):
-    paths = read_directory(dir_path)
-
-    corpus = []
-    for path in paths:
-        with open(path) as file:
-            words = []
-            reader = csv.reader(file, delimiter='\t')
-            for record in reader:
-                if not record:
-                    continue
-
-                _, _, stemma = record
-                word = stemma.lower()
-                words.append(word)
-            corpus.append(words)
-
-    return corpus
-
-
-def main():
+def main(path: str):
     td_matrix = TDMatrix.load("../../assets/annotated-corpus/td-train-data")
     vectorizer = TextVectorizer(td_matrix)
     model = gensim.models.Word2Vec.load("../../assets/w2v-data.txt")
@@ -140,9 +119,8 @@ def main():
 
     print(f"{cosines}")
     print_similarity(model)
-    vectorize_test_set(model)
-    print("Done!")
+    vectorize_test_set(path, model)
 
 
 if __name__ == "__main__":
-    main()
+    main(sys.argv[0])
