@@ -2,3 +2,6 @@
 /assets/train
 /assets/test
 /assets/topic-modeling
+/assets/annotated-corpus
+/assets/w2v-data.txt
+/assets/dictionary.csv
