@@ -1,9 +1,10 @@
 import logging
 import os
 
+from misc import configure_logging
 from text_mining.annotation import annotate_text
 
-logging.basicConfig(format="%(asctime)s -- %(message)s", level=logging.INFO)
+configure_logging()
 
 
 def process(path, dir_name):
