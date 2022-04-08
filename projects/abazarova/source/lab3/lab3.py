@@ -49,15 +49,15 @@ def lab3(train_path, test_path, vec_path, count_words, fdict_file, tdm_file):
     # PART 3 - neur.py
     # PART 4 - cos_dist.py
     # Part 5 - vectorize.py
-    # PART 6 - groups.py
+    # PART 6
     # PART 7 - algo_vec.py
 
     # Part 8:
     mod_path = str(Path(str(Path(Path.cwd()))[:-len("source")], "assets", "model.bin"))
-    # ## neur_train(train_path, mod_path, count_words)
-    # ## print("model trained")
-    compare_tokens(mod_path)
+    neur_train(train_path, mod_path, count_words)
+    print("model trained")
+    #compare_tokens(mod_path)
     print("tokens compared")
-    # ## print(algo_vec(mod_path, test_path, train_path))
-    # ## make_vector_file(mod_path,test_path,train_path,vec_path)
+    make_vector_file(mod_path, test_path, train_path, vec_path)
+    make_vector_file(mod_path, train_path,train_path, Path(str(Path(Path.cwd()))[:-len("source")], "assets", "train_vectors.csv"))
     print("lab finished")
