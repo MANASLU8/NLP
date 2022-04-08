@@ -1,7 +1,7 @@
 from numpy import diag, ones
 from pandas import read_json
 
-from dirs import misc_dir
+from paths import misc_dir
 
 # Distances generated with code from
 # Samuelsson, Axel. "Weighting Edit Distance to Improve Spelling Correction in Music Entity Search." (2017).

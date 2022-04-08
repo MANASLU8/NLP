@@ -1,6 +1,6 @@
 import pandas as pd
 
-from dirs import annotated_corpus_dir, test_embeddings_filepath
+from paths import annotated_corpus_dir, test_embeddings_filepath
 from task1.utils import read_tokens_from_annotated_corpus_tsv
 from task3.vectorizing_w2v import vectorize_text_w2v
 
