@@ -4,7 +4,7 @@ import pandas as pd
 from nltk.corpus import stopwords
 from pandas import DataFrame
 
-from dirs import token_dictionary_filepath
+from paths import token_dictionary_filepath
 
 _stopwords = stopwords.words("english")
 

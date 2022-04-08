@@ -3,7 +3,7 @@ from gensim.models import Word2Vec
 from matplotlib import pyplot as plt
 from sklearn.decomposition import PCA
 
-from dirs import word2vec_model_filepath
+from paths import word2vec_model_filepath
 from task3.cosine_distance import cosine_distance
 from task3.token_dictionary import load_token_dictionary
 

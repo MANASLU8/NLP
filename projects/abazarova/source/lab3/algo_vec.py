@@ -1,22 +1,33 @@
+from pathlib import Path
+
 from lab3.neur import *
 from lab3.vectorize import score_tf_idf, tf_idf
 from lab3.corpus import corpus
-import numpy as np
 
 
 def doc2vec(w2v, text_corp, train_corp):
-    sent_vec = []
+    vec = []
     for sent in text_corp:
+        tmp = []
         for token in sent:
             if token in list(w2v.wv.index_to_key):
                 tfidf_score = score_tf_idf(tf_idf(train_corp))[token]
                 vzv_vec = w2v.wv.get_vector(token)*tfidf_score
-                sent_vec.append(vzv_vec)
-
-    averaged = []
-    for vec in sent_vec:
-        averaged.append(np.average(vec, axis=0))
-    return averaged
+                tmp.append(vzv_vec)
+        avg = [0] * w2v.wv.vector_size
+        for line in tmp:
+            for i in range(w2v.wv.vector_size):
+                avg[i] += line[i]
+        for i in range(w2v.wv.vector_size):
+            avg[i] /= len(tmp)
+        vec.append(avg)
+    avg = [0] * w2v.wv.vector_size
+    for line in vec:
+        for i in range(w2v.wv.vector_size):
+            avg[i] += line[i]
+    for i in range(w2v.wv.vector_size):
+        avg[i] /= len(vec)
+    return avg
 
 
 def algo_vec(mod_path, text_path, train_path):
@@ -51,5 +62,5 @@ def make_vector_file(mod_path, text_path, train_path, rez_path):
             # print(doc_vect)
             fout.write(str(doc_count)+"\t"+"\t".join(str(elem) for elem in doc_vect))
             fout.write("\n")
-            print("обработан док номер:",doc_count)
+            print("обработан док номер:", doc_count)
 
